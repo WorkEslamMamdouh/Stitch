@@ -63,7 +63,7 @@ var Column = /** @class */ (function () {
         this.Name = "";
         this.value = "";
         this.Type = "text";
-        this.visible = false;
+        this.visible = true;
         this.Edit = true;
         this.Validation = new Valid_Con;
         this.ColumnType = new ControlEvents;
@@ -86,7 +86,7 @@ var Con = /** @class */ (function () {
 }());
 var ControlEvents = /** @class */ (function () {
     function ControlEvents() {
-        this.NameType = '';
+        this.NameType = 'Input';
         this.textField = '';
         this.onclick;
         this.onkeyup;

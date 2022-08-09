@@ -95,7 +95,7 @@ class Column {
         this.Name = "";
         this.value = "";
         this.Type = "text";
-        this.visible = false;
+        this.visible = true;
         this.Edit = true;
         this.Validation = new Valid_Con;
         this.ColumnType = new ControlEvents;
@@ -134,7 +134,7 @@ class Con {
 
 class ControlEvents {
     constructor() {
-        this.NameType = '';
+        this.NameType = 'Input';
         this.textField = '';
         this.onclick;
         this.onkeyup;

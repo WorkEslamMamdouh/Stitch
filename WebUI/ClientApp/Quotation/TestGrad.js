@@ -61,6 +61,7 @@ var TestGrad;
         });
     }
     function GenerateMode() {
+        $('#Grad1').html('');
         //let rp: Array<SqlTables> = new Array<SqlTables>()
         //let SqlEn: SqlEnt = new SqlEnt();
         var model = new SqlTables();
@@ -85,7 +86,6 @@ var TestGrad;
                 debugger;
                 var res = result;
                 var Model = JSON.parse(res);
-                Grid.ESG.object = Model;
                 Grid.Column = new Array();
                 var properties = Object.getOwnPropertyNames(Model);
                 for (var _i = 0, properties_1 = properties; _i < properties_1.length; _i++) {
@@ -95,6 +95,9 @@ var TestGrad;
                     Colum.title = "" + property + "";
                     Grid.Column.push(Colum);
                 }
+                debugger;
+                Model['StatusFlag'] = '';
+                Grid.ESG.object = Model;
                 BindGridControl(Grid);
                 //ModelArea.value = xx;
                 //DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");

@@ -90,7 +90,7 @@ namespace TestGrad {
 
 
     function GenerateMode() {
-
+        $('#Grad1').html('');
         //let rp: Array<SqlTables> = new Array<SqlTables>()
         //let SqlEn: SqlEnt = new SqlEnt();
         let model: SqlTables = new SqlTables();
@@ -127,7 +127,6 @@ namespace TestGrad {
 
 
 
-                Grid.ESG.object = Model;
                 Grid.Column = new Array<Column>();
               
 
@@ -141,6 +140,9 @@ namespace TestGrad {
                     Grid.Column.push(Colum);
 
                 }
+                debugger
+                Model['StatusFlag'] = '';
+                Grid.ESG.object = Model;
 
                 BindGridControl(Grid);
 
