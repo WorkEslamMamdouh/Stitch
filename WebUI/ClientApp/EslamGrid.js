@@ -36,17 +36,17 @@ var ESG = /** @class */ (function () {
     function ESG() {
         this.PrimaryKey = "";
         this.NameTable = "";
-        this.Save = false;
-        this.Back = false;
-        this.DeleteRow = false;
-        this.CopyRow = false;
-        this.Add = false;
-        this.Edit = false;
+        this.Save = true;
+        this.Back = true;
+        this.DeleteRow = true;
+        this.CopyRow = true;
+        this.Add = true;
+        this.Edit = true;
         this.SelectedKey;
         this.LastCounter = 0;
         this.LastCounterAdd = 0;
         this.RowCnt = 0;
-        this.Right = false;
+        this.Right = true;
         this.object = new Object();
         this.TotalModel = new Object();
         this.Model = new Array();
