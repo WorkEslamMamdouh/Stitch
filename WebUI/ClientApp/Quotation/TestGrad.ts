@@ -5,34 +5,147 @@ $(document).ready(() => {
 
 namespace TestGrad {
 
-    var sys: SystemTools = new SystemTools(); 
-    var SysSession: SystemSession = GetSystemSession(Modules.Quotation); 
-    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>(); 
+    var sys: SystemTools = new SystemTools();
+    var SysSession: SystemSession = GetSystemSession(Modules.Quotation);
+    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
     var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
     var BranchCode: number;//SharedSession.CurrentEnvironment.CompCode; 
     var Grid: ESGrid = new ESGrid();
+    var SqlEn: SqlEnt = new SqlEnt();
+
+    var GenerateModels: HTMLButtonElement;
+    var ConactServer: HTMLButtonElement;
+    var ModelArea: HTMLTextAreaElement;
+    var DataSours: HTMLSelectElement;
 
     export function InitalizeComponent() {
-         
+
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
 
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SlsTrSales", "GetAllUOM"),
-            success: (d) => {
-                let result = d as BaseResponse;
-                if (result.IsSuccess) {
-                    I_D_UOMDetails = result.Response as Array<I_D_UOM>;
-                }
-            }
-        });
-         
-        InitializeGridControl(); 
+        GenerateModels = document.getElementById('GenerateModels') as HTMLButtonElement
+        ConactServer = document.getElementById('ConactServer') as HTMLButtonElement
+        ModelArea = document.getElementById('ModelArea') as HTMLTextAreaElement
+        DataSours = document.getElementById('DataSours') as HTMLSelectElement
+
+
+
+        //Ajax.Callsync({
+        //    type: "Get",
+        //    url: sys.apiUrl("SlsTrSales", "GetAllUOM"),
+        //    success: (d) => {
+        //        let result = d as BaseResponse;
+        //        if (result.IsSuccess) {
+        //            I_D_UOMDetails = result.Response as Array<I_D_UOM>;
+        //        }
+        //    }
+        //});
+
+        //InitializeGridControl(); 
+
+        ConactServer.onclick = ConactServer_onclick;
+        GenerateModels.onclick = GenerateModels_onclick;
+
     }
-     
+
+
+    function ConactServer_onclick() {
+
+        GetsqlData();
+
+    }
+
+    function GenerateModels_onclick() {
+        GenerateMode();
+    }
+
+    function GenerateMode() {
+
+        //let rp: Array<SqlTables> = new Array<SqlTables>()
+        //let SqlEn: SqlEnt = new SqlEnt();
+        let model: SqlTables = new SqlTables();
+        let modelSql: ModelSql = new ModelSql();
+
+        let rp: SqlEnt = new SqlEnt();
+
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+
+        model.name = $("#DataSours option:selected").text();
+        model.object_id = $('#DataSours').val();
+
+
+        modelSql.sqlTables = model;
+        modelSql.sqlEnt = rp;
+
+        //rp.push(model);
+
+        console.log(modelSql)
+        let _Data: string = JSON.stringify(modelSql);
+
+        Ajax.CallAsync({
+            url: Url.Action("GenerateModelsTest", "GeneralSQL"),
+            data: { RepP: _Data },
+            success: (d) => {
+                let result = d
+                debugger
+                let res = result;
+
+                var xx: any = JSON.parse(res);
+
+                ModelArea.value = xx;
+
+                //DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
+
+
+            }
+        })
+
+    }
+
+    function GetsqlData() {
+
+        let rp: SqlEnt = new SqlEnt();
+
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+
+        Ajax.CallAsync({
+            url: Url.Action("CounactData", "GeneralSQL"),
+            data: rp,
+            success: (d) => {
+                let result = d
+                debugger
+                let res = result as SqlTables;
+
+
+                DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
+
+
+            }
+        })
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function InitializeGridControl() {
-         
+
         Grid.ESG.NameTable = 'Grad1';
         Grid.ESG.PrimaryKey = 'UomID';
         Grid.ESG.Right = true;
@@ -45,21 +158,21 @@ namespace TestGrad {
         Grid.ESG.OnfunctionSave = SaveNew;
         Grid.ESG.OnfunctionTotal = computeTotal;
         Grid.ESG.OnRowDoubleClicked = DoubleClicked;
-        Grid.ESG.object = new I_D_UOM(); 
+        Grid.ESG.object = new I_D_UOM();
         Grid.Column = [
             { title: "ID", Name: "UomID", value: "0", Type: "text", style: "width: 10%", Edit: false, visible: false, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
             { title: "الرقم", Name: "UomCode", value: "0", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Dropdown(I_D_UOMDetails, 'DescA', () => { }, () => { }, () => { console.log(this) }) },
-            { title: "الاسم", Name: "DescA", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => {   }) },
-            { title: "العمر", Name: "DescE", value: "1", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false),ColumnType: ControlType.Input(() => {  }, () => { }, () => { console.log(this) }) },
+            { title: "الاسم", Name: "DescA", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { }) },
+            { title: "العمر", Name: "DescE", value: "1", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
             { title: "رقم التيلفون", Name: "CompCode", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
             { title: "رقم البطاقه", Name: "Remarks", value: "BUT", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { }) },
             { title: "النوع", Name: "CreatedAt", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { ('CreatedBy').Set_Val(('CreatedAt').Get_Val(Grid), Grid) }, () => { console.log(this.propone) }) },
-            { title: "الملاحظات", Name: "CreatedBy", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(true,'مينفع تساوي (100)' ,['='] ,'100'), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
+            { title: "الملاحظات", Name: "CreatedBy", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(true, 'مينفع تساوي (100)', ['='], '100'), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
             { title: "رصيد", Name: "Cheack", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.checkbox(() => { alert(('Cheack').Get_Cheak(Grid)) }, () => { }, () => { }) },
         ]
 
-        BindGridControl(Grid); 
-        DisplayDataGridControl(I_D_UOMDetails, Grid); 
+        BindGridControl(Grid);
+        DisplayDataGridControl(I_D_UOMDetails, Grid);
     }
     function SaveNew() {
         debugger
@@ -67,14 +180,13 @@ namespace TestGrad {
 
         console.log(Grid.ESG.Model)
     }
-    function computeTotal() { 
-        console.log(Grid.ESG.TotalModel); 
+    function computeTotal() {
+        console.log(Grid.ESG.TotalModel);
+    }
+    function DoubleClicked() {
+        alert(Grid.ESG.SelectedKey);
     }
 
-    function DoubleClicked() {
-        alert(Grid.ESG.SelectedKey);    
-    }
-      
 }
 
 

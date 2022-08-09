@@ -1895,8 +1895,40 @@ class I_D_UOM {
     public StatusFlag: string;
     public Cheack: boolean;
 }
+ 
+class SqlEnt {
+    constructor() { 
+        this.Server = "";
+        this.Database = "";
+        this.User = "";
+        this.Password = '';
+       
+    }
+    public Server: string;
+    public Database: string;
+    public User: string;
+    public Password: string;
+   
+}
+
+class SqlTables {
+    constructor() { 
+        this.name = "";
+        this.object_id = 0;  
+    }
+    public name: string;
+    public object_id: number; 
+   
+}
 
 
+class ModelSql  {
+    constructor() { 
+        this.sqlTables = new SqlTables();
+        this.sqlEnt = new SqlEnt();
+    }
+    public sqlTables: SqlTables;
+    public sqlEnt: SqlEnt;
+}
 
-
-
+ 

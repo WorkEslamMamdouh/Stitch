@@ -9,22 +9,86 @@ var TestGrad;
     var compcode; //SharedSession.CurrentEnvironment.CompCode;
     var BranchCode; //SharedSession.CurrentEnvironment.CompCode; 
     var Grid = new ESGrid();
+    var SqlEn = new SqlEnt();
+    var GenerateModels;
+    var ConactServer;
+    var ModelArea;
+    var DataSours;
     function InitalizeComponent() {
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SlsTrSales", "GetAllUOM"),
-            success: function (d) {
-                var result = d;
-                if (result.IsSuccess) {
-                    I_D_UOMDetails = result.Response;
-                }
-            }
-        });
-        InitializeGridControl();
+        GenerateModels = document.getElementById('GenerateModels');
+        ConactServer = document.getElementById('ConactServer');
+        ModelArea = document.getElementById('ModelArea');
+        DataSours = document.getElementById('DataSours');
+        //Ajax.Callsync({
+        //    type: "Get",
+        //    url: sys.apiUrl("SlsTrSales", "GetAllUOM"),
+        //    success: (d) => {
+        //        let result = d as BaseResponse;
+        //        if (result.IsSuccess) {
+        //            I_D_UOMDetails = result.Response as Array<I_D_UOM>;
+        //        }
+        //    }
+        //});
+        //InitializeGridControl(); 
+        ConactServer.onclick = ConactServer_onclick;
+        GenerateModels.onclick = GenerateModels_onclick;
     }
     TestGrad.InitalizeComponent = InitalizeComponent;
+    function ConactServer_onclick() {
+        GetsqlData();
+    }
+    function GenerateModels_onclick() {
+        GenerateMode();
+    }
+    function GenerateMode() {
+        //let rp: Array<SqlTables> = new Array<SqlTables>()
+        //let SqlEn: SqlEnt = new SqlEnt();
+        var model = new SqlTables();
+        var modelSql = new ModelSql();
+        var rp = new SqlEnt();
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+        model.name = $("#DataSours option:selected").text();
+        model.object_id = $('#DataSours').val();
+        modelSql.sqlTables = model;
+        modelSql.sqlEnt = rp;
+        //rp.push(model);
+        console.log(modelSql);
+        var _Data = JSON.stringify(modelSql);
+        Ajax.CallAsync({
+            url: Url.Action("GenerateModelsTest", "GeneralSQL"),
+            data: { RepP: _Data },
+            success: function (d) {
+                var result = d;
+                debugger;
+                var res = result;
+                var xx = JSON.parse(res);
+                ModelArea.value = xx;
+                //DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
+            }
+        });
+    }
+    function GetsqlData() {
+        var rp = new SqlEnt();
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+        Ajax.CallAsync({
+            url: Url.Action("CounactData", "GeneralSQL"),
+            data: rp,
+            success: function (d) {
+                var result = d;
+                debugger;
+                var res = result;
+                DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
+            }
+        });
+    }
     function InitializeGridControl() {
         var _this = this;
         Grid.ESG.NameTable = 'Grad1';

@@ -976,6 +976,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ClientToolsController.cs" />
     <Compile Include="Controllers\GeneralRepController.cs" />
+    <Compile Include="Controllers\GeneralSQLController.cs" />
     <Compile Include="Controllers\GeneralReportsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -992,6 +993,12 @@
     <Compile Include="Models\CustomModels\SessionManager.cs" />
     <Compile Include="Models\CustomModels\SessionRecord.cs" />
     <Compile Include="Models\CustomModels\UserPrivilege.cs" />
+    <Compile Include="Models\SQL\Extensions.cs" />
+    <Compile Include="Models\SQL\SqlColumns.cs" />
+    <Compile Include="Models\SQL\SqlEnt.cs" />
+    <Compile Include="Models\SQL\SqlEntities.cs" />
+    <Compile Include="Models\SQL\SqlTables.cs" />
+    <Compile Include="Models\SQL\SqlTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\Forms\ClassPrint.cs" />
     <Compile Include="Reports\Forms\ReportsDetails.cs" />

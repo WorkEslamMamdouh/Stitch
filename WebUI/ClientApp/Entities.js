@@ -1147,4 +1147,27 @@ var I_D_UOM = /** @class */ (function () {
     }
     return I_D_UOM;
 }());
+var SqlEnt = /** @class */ (function () {
+    function SqlEnt() {
+        this.Server = "";
+        this.Database = "";
+        this.User = "";
+        this.Password = '';
+    }
+    return SqlEnt;
+}());
+var SqlTables = /** @class */ (function () {
+    function SqlTables() {
+        this.name = "";
+        this.object_id = 0;
+    }
+    return SqlTables;
+}());
+var ModelSql = /** @class */ (function () {
+    function ModelSql() {
+        this.sqlTables = new SqlTables();
+        this.sqlEnt = new SqlEnt();
+    }
+    return ModelSql;
+}());
 //# sourceMappingURL=Entities.js.map
