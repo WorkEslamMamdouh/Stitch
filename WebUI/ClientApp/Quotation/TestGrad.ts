@@ -46,6 +46,7 @@ namespace TestGrad {
         ConactServer.onclick = ConactServer_onclick;
         GenerateModels.onclick = GenerateModels_onclick;
 
+        InitializeGridControl();
     }
 
 
@@ -58,6 +59,35 @@ namespace TestGrad {
     function GenerateModels_onclick() {
         GenerateMode();
     }
+
+
+    function GetsqlData() {
+
+        let rp: SqlEnt = new SqlEnt();
+
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+
+        Ajax.CallAsync({
+            url: Url.Action("CounactData", "GeneralSQL"),
+            data: rp,
+            success: (d) => {
+                let result = d
+                debugger
+                let res = result as SqlTables;
+
+
+                DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
+
+
+            }
+        })
+
+    }
+
+
 
     function GenerateMode() {
 
@@ -93,9 +123,28 @@ namespace TestGrad {
                 debugger
                 let res = result;
 
-                var xx: any = JSON.parse(res);
+                var Model: any = JSON.parse(res);
 
-                ModelArea.value = xx;
+
+
+                Grid.ESG.object = Model;
+                Grid.Column = new Array<Column>();
+              
+
+
+                let properties = Object.getOwnPropertyNames(Model);
+                for (var property of properties) {
+
+                    let Colum: Column = new Column();
+                    Colum.Name = "" + property+"";
+                    Colum.title = "" + property+"";
+                    Grid.Column.push(Colum);
+
+                }
+
+                BindGridControl(Grid);
+
+                //ModelArea.value = xx;
 
                 //DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
 
@@ -104,35 +153,6 @@ namespace TestGrad {
         })
 
     }
-
-    function GetsqlData() {
-
-        let rp: SqlEnt = new SqlEnt();
-
-        rp.Database = $('#Database').val();
-        rp.Server = $('#Server').val();
-        rp.Password = $('#Password').val();
-        rp.User = $('#User').val();
-
-        Ajax.CallAsync({
-            url: Url.Action("CounactData", "GeneralSQL"),
-            data: rp,
-            success: (d) => {
-                let result = d
-                debugger
-                let res = result as SqlTables;
-
-
-                DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
-
-
-            }
-        })
-
-    }
-
-
-
 
 
 
@@ -158,21 +178,35 @@ namespace TestGrad {
         Grid.ESG.OnfunctionSave = SaveNew;
         Grid.ESG.OnfunctionTotal = computeTotal;
         Grid.ESG.OnRowDoubleClicked = DoubleClicked;
-        Grid.ESG.object = new I_D_UOM();
-        Grid.Column = [
-            { title: "ID", Name: "UomID", value: "0", Type: "text", style: "width: 10%", Edit: false, visible: false, Validation: Valid.Set(false), ColumnType: ControlType.Input() },
-            { title: "الرقم", Name: "UomCode", value: "0", Type: "text", style: "width: 30%", Edit: true, visible: true, Validation: Valid.Set(true), ColumnType: ControlType.Dropdown(I_D_UOMDetails, 'DescA', () => { }, () => { }, () => { console.log(this) }) },
-            { title: "الاسم", Name: "DescA", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { }) },
-            { title: "العمر", Name: "DescE", value: "1", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
-            { title: "رقم التيلفون", Name: "CompCode", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
-            { title: "رقم البطاقه", Name: "Remarks", value: "BUT", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { }) },
-            { title: "النوع", Name: "CreatedAt", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { ('CreatedBy').Set_Val(('CreatedAt').Get_Val(Grid), Grid) }, () => { console.log(this.propone) }) },
-            { title: "الملاحظات", Name: "CreatedBy", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(true, 'مينفع تساوي (100)', ['='], '100'), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
-            { title: "رصيد", Name: "Cheack", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.checkbox(() => { alert(('Cheack').Get_Cheak(Grid)) }, () => { }, () => { }) },
-        ]
+        //Grid.ESG.object = new I_D_UOM();
 
-        BindGridControl(Grid);
-        DisplayDataGridControl(I_D_UOMDetails, Grid);
+
+        ////Grid.ESG.object = new I_D_UOM();
+        ////Grid.Column = new Array<Column>();
+        ////for (var i = 0; i < length; i++) {
+
+        ////    let Colum: Column = new Column();
+        ////    Colum.Name = "UomID";
+        ////    Colum.title = "UomID";
+        ////    Grid.Column.push(Colum);
+
+        ////}
+        ////BindGridControl(Grid);
+
+        //Grid.Column = [
+        //    { title: "ID", Name: "UomID" },
+        //    { title: "الرقم", Name: "UomCode" },
+        //    { title: "الاسم", Name: "DescA", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { }) },
+        //    { title: "العمر", Name: "DescE", value: "1", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
+        //    { title: "رقم التيلفون", Name: "CompCode", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
+        //    { title: "رقم البطاقه", Name: "Remarks", value: "BUT", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { }, () => { }) },
+        //    { title: "النوع", Name: "CreatedAt", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.Input(() => { }, () => { ('CreatedBy').Set_Val(('CreatedAt').Get_Val(Grid), Grid) }, () => { console.log(this.propone) }) },
+        //    { title: "الملاحظات", Name: "CreatedBy", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(true, 'مينفع تساوي (100)', ['='], '100'), ColumnType: ControlType.Input(() => { }, () => { }, () => { console.log(this) }) },
+        //    { title: "رصيد", Name: "Cheack", value: "0", Type: "text", style: "width: 10%", Edit: true, visible: true, Validation: Valid.Set(false), ColumnType: ControlType.checkbox(() => { alert(('Cheack').Get_Cheak(Grid)) }, () => { }, () => { }) },
+        //]
+
+        //BindGridControl(Grid);
+        //DisplayDataGridControl(I_D_UOMDetails, Grid);
     }
     function SaveNew() {
         debugger

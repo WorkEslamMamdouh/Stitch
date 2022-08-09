@@ -58,13 +58,13 @@ var ESG = /** @class */ (function () {
 }());
 var Column = /** @class */ (function () {
     function Column() {
-        this.style = "";
+        this.style = "width: 100%";
         this.title = "";
         this.Name = "";
         this.value = "";
-        this.Type = "";
+        this.Type = "text";
         this.visible = false;
-        this.Edit = false;
+        this.Edit = true;
         this.Validation = new Valid_Con;
         this.ColumnType = new ControlEvents;
     }

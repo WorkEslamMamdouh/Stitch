@@ -90,26 +90,26 @@ class ESG {
 
 class Column {
     constructor() {
-        this.style = "";
+        this.style = "width: 100%";
         this.title = "";
         this.Name = "";
         this.value = "";
-        this.Type = "";
+        this.Type = "text";
         this.visible = false;
-        this.Edit = false;
+        this.Edit = true;
         this.Validation = new Valid_Con;
         this.ColumnType = new ControlEvents;
 
     }
-    public style: string;
-    public title: string;
-    public Name: string;
-    public value: string;
-    public Type: string;
-    public visible: boolean;
-    public Edit: boolean;
-    public Validation: Valid_Con;
-    public ColumnType: ControlEvents;
+    public style?: string;
+    public title?: string;
+    public Name?: string;
+    public value?: string;
+    public Type?: string;
+    public visible?: boolean;
+    public Edit?: boolean;
+    public Validation?: Valid_Con;
+    public ColumnType?: ControlEvents;
 }
 
 
