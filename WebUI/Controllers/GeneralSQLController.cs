@@ -118,29 +118,14 @@ namespace Inv.WebUI.Controllers
                     command.CommandText = "select * from " + NameTable + "";
 
                     SqlDataReader reader = command.ExecuteReader();
-
-
-
-
+                     
                     var columns = db.SqlColumns.Where(f => f.object_id == rp.sqlTables.object_id).ToList();
-
-
-
-                      string typeName = "";
-
-                    int falg = 0;
+                     
                     int falgfrist = 0;
                     int falgfristM = 0;
-
-                    var ret = new ExpandoObject() as IDictionary<string, Object>;
-
-                 
-
-                 
-
-                    models.AppendLine("  [ ");
-
-
+                     
+                     
+                    models.AppendLine("  [ "); 
                     while (reader.Read())
                     {
 
@@ -167,41 +152,16 @@ namespace Inv.WebUI.Controllers
                                 models.AppendLine(",\"" + column.name + "\"" + " : " + "\"" + reader["" + column.name + ""] + "\"");
                             }
 
-                            falgfrist = 1;
-
-
-
-                            //if (typeName == "")
-                            //{
-                            //    typeName = column.name;
-                            //    break;
-                            //}
-
-                            //if (typeName == column.name)
-                            //{
-                            //    falg = 1;
-                            //    continue;
-                            //}
-                            //if (falg == 1)
-                            //{
-                            //    typeName = column.name;
-                            //    break;
-
-                            //}
+                            falgfrist = 1; 
 
                         }
-
-
-                        models.AppendLine("}");
-
-                        falgfristM = 1;
-
+                         
+                        models.AppendLine("}"); 
+                        falgfristM = 1; 
                     }
-
-
+                     
                     models.AppendLine(" ] ");
-
-
+                     
                     connection.Close();
                     command.Dispose();
                     connection.Dispose(); 
