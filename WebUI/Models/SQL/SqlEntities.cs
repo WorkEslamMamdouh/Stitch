@@ -1,4 +1,4 @@
-﻿ 
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -43,14 +43,40 @@ namespace Inv.WebUI.Models
                         connection.Dispose();
                         return tbl;
                     }
-                 catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        return tbl; 
+                        return tbl;
                         throw new Exception(ex.Message);
                     }
-            
+
                 }
-           
+
+
+            }
+        }
+
+        private SqlDataReader GetDataNew(string sqlStatment)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+
+                    connection.Open();
+                    command.CommandText = sqlStatment;
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                     
+                    //connection.Close();
+                    command.Dispose();
+                    connection.Dispose();
+                    return reader;
+
+                }
+
 
             }
         }
@@ -61,7 +87,7 @@ namespace Inv.WebUI.Models
         {
             get
             {
-                if(_sqlTables == null)
+                if (_sqlTables == null)
                 {
                     _sqlTables = (List<SqlTables>)GetData("(Select sys.tables.object_id , sys.tables.name From sys.tables union select sys.views.object_id,sys.views.name from sys.views )order by name").ToList<SqlTables>();
                 }
@@ -83,6 +109,19 @@ namespace Inv.WebUI.Models
                 return _sqlColumns;
             }
         }
+
+        public SqlDataReader GetDataTable(string NameTable)
+        {
+             
+
+            SqlDataReader dt = GetDataNew("select * from " + NameTable + "");
+
+
+            return dt;
+
+        }
+
+
 
         private List<SqlTypes> _sqlTypes;
         public List<SqlTypes> SqlTypes

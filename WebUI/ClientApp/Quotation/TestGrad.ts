@@ -13,6 +13,7 @@ namespace TestGrad {
     var Grid: ESGrid = new ESGrid();
     var SqlEn: SqlEnt = new SqlEnt();
 
+    var ShowData: HTMLButtonElement;
     var GenerateModels: HTMLButtonElement;
     var ConactServer: HTMLButtonElement;
     var ModelArea: HTMLTextAreaElement;
@@ -23,6 +24,7 @@ namespace TestGrad {
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
 
+        ShowData = document.getElementById('ShowData') as HTMLButtonElement
         GenerateModels = document.getElementById('GenerateModels') as HTMLButtonElement
         ConactServer = document.getElementById('ConactServer') as HTMLButtonElement
         ModelArea = document.getElementById('ModelArea') as HTMLTextAreaElement
@@ -45,6 +47,7 @@ namespace TestGrad {
 
         ConactServer.onclick = ConactServer_onclick;
         GenerateModels.onclick = GenerateModels_onclick;
+        ShowData.onclick = ShowData_onclick;
 
         InitializeGridControl();
     }
@@ -60,6 +63,48 @@ namespace TestGrad {
         GenerateMode();
     }
 
+
+
+    function ShowData_onclick() {
+
+
+        let model: SqlTables = new SqlTables();
+        let modelSql: ModelSql = new ModelSql();
+
+        let rp: SqlEnt = new SqlEnt();
+
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+
+        model.name = $("#DataSours option:selected").text();
+        model.object_id = $('#DataSours').val();
+
+
+        modelSql.sqlTables = model;
+        modelSql.sqlEnt = rp;
+
+        let _Data: string = JSON.stringify(modelSql);
+
+        Ajax.CallAsync({
+            url: Url.Action("ShowData", "GeneralSQL"),
+            data: { RepP: _Data },
+            success: (d) => {
+                let result = d
+                debugger
+                let res = result  
+
+                var Model: Array<any>= JSON.parse(res);
+
+                DisplayDataGridControl(Model, Grid);
+
+
+            }
+        })
+
+
+    }
 
     function GetsqlData() {
 
@@ -89,9 +134,7 @@ namespace TestGrad {
 
 
 
-    function GenerateMode() { 
-        //let rp: Array<SqlTables> = new Array<SqlTables>()
-        //let SqlEn: SqlEnt = new SqlEnt();
+    function GenerateMode() {  
         let model: SqlTables = new SqlTables();
         let modelSql: ModelSql = new ModelSql();
 
@@ -108,10 +151,7 @@ namespace TestGrad {
 
         modelSql.sqlTables = model;
         modelSql.sqlEnt = rp;
-
-        //rp.push(model);
-
-        console.log(modelSql)
+          
         let _Data: string = JSON.stringify(modelSql);
 
         Ajax.CallAsync({
@@ -124,12 +164,9 @@ namespace TestGrad {
 
                 var Model: any = JSON.parse(res);
 
-
-
+                 
                 Grid.Column = new Array<Column>();
-              
-
-
+               
                 let properties = Object.getOwnPropertyNames(Model);
                 for (var property of properties) {
 
@@ -145,12 +182,7 @@ namespace TestGrad {
                 Grid.ESG.LastCounter = 0; 
                 Grid.ESG.LastCounterAdd = 0; 
                 BindGridControl(Grid);
-
-                //ModelArea.value = xx;
-
-                //DocumentActions.FillCombowithdefult(result, DataSours, 'object_id', 'name', "Select Data Sours");
-
-
+                 
             }
         })
 
