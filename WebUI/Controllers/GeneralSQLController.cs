@@ -356,14 +356,18 @@ namespace Inv.WebUI.Controllers
         private void AssignAndSave(List<object> Model, SqlTables table)
         {
             //List<object> Modell = Model;
-            using (SqlConnection connection = new SqlConnection("Data source = " + db.Server + " ; Initial catalog = " + db.Database + " ; User id = " + db.User + "; Password = " + db.Password + ";"))
-            {
 
-                using (SqlCommand command = new SqlCommand())
+
+            foreach (Object obj in Model)
+            {
+                using (SqlConnection connection = new SqlConnection("Data source = " + db.Server + " ; Initial catalog = " + db.Database + " ; User id = " + db.User + "; Password = " + db.Password + ";"))
                 {
-                    foreach (Object obj in Model)
+
+                    using (SqlCommand command = new SqlCommand())
                     {
+
                         command.Connection = connection;
+
                         connection.Open();
 
                         string ID = "";
@@ -379,12 +383,12 @@ namespace Inv.WebUI.Controllers
                         {
                             ID = reader["COLUMN_NAME"].ToString();
                         }
-                        connection.Close(); 
+                        connection.Close();
 
                         string qury = returnQueryInsert(obj, table, ID);
-                    
 
-                         
+
+
                         connection.Open();
                         command.CommandText = qury;
                         command.ExecuteNonQuery();
@@ -395,6 +399,7 @@ namespace Inv.WebUI.Controllers
                     }
                 }
             }
+
 
         }
 
@@ -468,7 +473,7 @@ namespace Inv.WebUI.Controllers
                         }
                         else
                         {
-                            models.Append("," + column.name + " = '" + value.ToString() + "'");  
+                            models.Append("," + column.name + " = '" + value.ToString() + "'");
                         }
                         flagfrist = 1;
                     }
@@ -477,14 +482,36 @@ namespace Inv.WebUI.Controllers
                         where.Append(" where " + column.name + " = '" + value.ToString() + "'");
                     }
 
-                   
+
                 }
                 models.Append(where);
 
             }
             if (StatusFlag == "d")
             {
+                models.AppendLine("delete " + table.name + "  ");
+                //where.AppendLine("where " + TableID + " = ");
+                foreach (SqlColumns column in columns)
+                {
 
+                    string propertyName = column.name;
+                    var type = obj.GetType();
+                    string value = "";
+
+
+                    value = routes_list[column.name].ToString();
+
+
+                    if (column.name == ID)
+                    {
+                        where.Append(" where " + column.name + " = '" + value.ToString() + "'");
+
+                    }
+                     
+
+
+                }
+                models.Append(where);
 
             }
 

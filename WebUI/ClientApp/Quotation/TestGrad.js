@@ -67,6 +67,8 @@ var TestGrad;
                 debugger;
                 var res = result;
                 var Model = JSON.parse(res);
+                Grid.ESG.LastCounter = 0;
+                Grid.ESG.LastCounterAdd = 0;
                 DisplayDataGridControl(Model, Grid);
             }
         });
@@ -136,7 +138,7 @@ var TestGrad;
     }
     function SaveNew() {
         debugger;
-        alert(Grid.ESG.Model);
+        //alert(Grid.ESG.Model)
         console.log(Grid.ESG.Model);
         var model = new SqlTables();
         var modelSql = new ModelSql();
@@ -159,6 +161,8 @@ var TestGrad;
                 debugger;
                 var res = result;
                 var Model = JSON.parse(res);
+                Grid.ESG.LastCounter = 0;
+                Grid.ESG.LastCounterAdd = 0;
                 DisplayDataGridControl(Model, Grid);
             }
         });

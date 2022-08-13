@@ -460,6 +460,7 @@ function BuildGridControl(flagDisplay, Grid) {
     $('#btn_Copy_' + NameTable + cnt).click(function (e) {
         flagNotClick = true;
         CopyRow(Grid, cnt);
+        //$("#StatusFlag_" + NameTable + '_' + cnt+1).val('i');
     });
     var _loop_1 = function (u) {
         var td = '';
@@ -559,6 +560,10 @@ function BuildGridControl(flagDisplay, Grid) {
     debugger;
     $('#No_Row_' + NameTable + (Grid.ESG.LastCounterAdd - 1) + '').before($('#No_Row_' + NameTable + (cnt) + ''));
     $('#btn_minus_' + NameTable + (cnt) + '').focus();
+    debugger;
+    if (flagDisplay == true) {
+        $("#StatusFlag_" + NameTable + '_' + cnt).val('i');
+    }
     Grid.ESG.LastCounter++;
     Grid.ESG.LastCounterAdd++;
 }
@@ -787,11 +792,11 @@ function CopyRow(Grid, index) {
         if (cnt == index) {
             GActions.AssignToModel(CopyModel, NameTable, cnt, StatusFlag);
             CopyModel.Ser = LastCountGrid;
-            CopyModel.StatusFlag = 'i';
+            //CopyModel.StatusFlag = 'i';
             BuildGridControl(true, Grid);
             BuildCopy(Grid, CopyModel, LastCountGrid);
             RowCopy = LastCountGrid;
-            $("#StatusFlag_" + NameTable + '_' + cnt).val('i');
+            //$("#StatusFlag_" + NameTable + '_' + (cnt + 1)).val('i');
             //Grid.ESG.LastCounter++; 
             Grid.ESG.LastCounterAdd = Grid.ESG.LastCounterAdd - 1;
             break;

@@ -94,7 +94,9 @@ namespace TestGrad {
                 let res = result  
 
                 var Model: Array<any>= JSON.parse(res);
-
+         
+                Grid.ESG.LastCounter = 0;
+                Grid.ESG.LastCounterAdd = 0;
                 DisplayDataGridControl(Model, Grid);
 
 
@@ -210,7 +212,7 @@ namespace TestGrad {
 
     function SaveNew() {
         debugger
-        alert(Grid.ESG.Model)
+        //alert(Grid.ESG.Model)
 
         console.log(Grid.ESG.Model)
 
@@ -248,7 +250,9 @@ namespace TestGrad {
                 let res = result
 
                 var Model: Array<any> = JSON.parse(res);
-
+            
+                Grid.ESG.LastCounter = 0;
+                Grid.ESG.LastCounterAdd = 0;
                 DisplayDataGridControl(Model, Grid);
 
 
