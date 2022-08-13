@@ -21,39 +21,49 @@
     .Price {
         width: 9% !important;
     }
-   
 </style>
 <body class="materialdesign">
     <div class="content-inner-all">
+        <div class="sparkline8-graph" style="border-radius: 50px;">
+            <label>Database</label>
+            <input id="Database" />
 
-        <label>Database</label>
-        <input id="Database" />
+            <label>Server</label>
+            <input id="Server" />
 
-        <label>Server</label>
-        <input id="Server" />
+            <label>Password</label>
+            <input id="Password" />
 
-        <label>Password</label>
-        <input id="Password" />
+            <label>User</label>
+            <input id="User" />
 
-        <label>User</label>
-        <input id="User" />
+            <br />
+            <br /> 
+            <div class="col-xs-12 sparkline8-graph" style="border-radius: 50px;">
+                <div class="col-xs-1">
+                    <button id="ConactServer" value="Conact" class="btn btn-custon-four btn-success">   Conact </button>
+                </div>
 
-        <br />
-        <br />
-        <button id="ConactServer" value="Conact">   Conact </button>
-        <textarea id="ModelArea"></textarea>
-        <select id="DataSours" style="width: 22%;"></select>
+                <div class="col-xs-3">
 
-        <button id="GenerateModels" value="Generate Models">   Generate Models </button>
-        <button id="ShowData" value="Generate Models">   Show Data </button>
+                    <select id="DataSours" class="form-control "></select>
+                </div>
+
+                <div class="col-xs-3">
+
+                    <button id="GenerateModels" value="Generate Models" class="btn btn-custon-four btn-success">   Show Data </button>
+                    @*<button id="ShowData" value="Generate Models" class="btn btn-custon-four btn-success" >   Show Data </button>*@
 
 
+                </div>
+            </div>
+        </div>
         <div id="Grad1">
 
         </div>
 
     </div>
-   
+
 
 
 

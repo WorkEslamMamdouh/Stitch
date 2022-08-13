@@ -10,18 +10,16 @@ var TestGrad;
     var BranchCode; //SharedSession.CurrentEnvironment.CompCode; 
     var Grid = new ESGrid();
     var SqlEn = new SqlEnt();
-    var ShowData;
+    //var ShowData: HTMLButtonElement;
     var GenerateModels;
     var ConactServer;
-    var ModelArea;
     var DataSours;
     function InitalizeComponent() {
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
-        ShowData = document.getElementById('ShowData');
+        //ShowData = document.getElementById('ShowData') as HTMLButtonElement
         GenerateModels = document.getElementById('GenerateModels');
         ConactServer = document.getElementById('ConactServer');
-        ModelArea = document.getElementById('ModelArea');
         DataSours = document.getElementById('DataSours');
         //Ajax.Callsync({
         //    type: "Get",
@@ -36,7 +34,7 @@ var TestGrad;
         //InitializeGridControl(); 
         ConactServer.onclick = ConactServer_onclick;
         GenerateModels.onclick = GenerateModels_onclick;
-        ShowData.onclick = ShowData_onclick;
+        //ShowData.onclick = ShowData_onclick;
         InitializeGridControl();
     }
     TestGrad.InitalizeComponent = InitalizeComponent;
@@ -126,6 +124,7 @@ var TestGrad;
                 Grid.ESG.LastCounter = 0;
                 Grid.ESG.LastCounterAdd = 0;
                 BindGridControl(Grid);
+                setTimeout(function () { ShowData_onclick(); }, 200);
             }
         });
     }

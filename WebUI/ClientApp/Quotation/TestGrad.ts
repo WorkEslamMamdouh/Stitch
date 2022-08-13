@@ -13,10 +13,9 @@ namespace TestGrad {
     var Grid: ESGrid = new ESGrid();
     var SqlEn: SqlEnt = new SqlEnt();
 
-    var ShowData: HTMLButtonElement;
+    //var ShowData: HTMLButtonElement;
     var GenerateModels: HTMLButtonElement;
-    var ConactServer: HTMLButtonElement;
-    var ModelArea: HTMLTextAreaElement;
+    var ConactServer: HTMLButtonElement; 
     var DataSours: HTMLSelectElement;
 
     export function InitalizeComponent() {
@@ -24,10 +23,9 @@ namespace TestGrad {
         compcode = Number(SysSession.CurrentEnvironment.CompCode);
         BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
 
-        ShowData = document.getElementById('ShowData') as HTMLButtonElement
+        //ShowData = document.getElementById('ShowData') as HTMLButtonElement
         GenerateModels = document.getElementById('GenerateModels') as HTMLButtonElement
-        ConactServer = document.getElementById('ConactServer') as HTMLButtonElement
-        ModelArea = document.getElementById('ModelArea') as HTMLTextAreaElement
+        ConactServer = document.getElementById('ConactServer') as HTMLButtonElement 
         DataSours = document.getElementById('DataSours') as HTMLSelectElement
 
 
@@ -47,7 +45,7 @@ namespace TestGrad {
 
         ConactServer.onclick = ConactServer_onclick;
         GenerateModels.onclick = GenerateModels_onclick;
-        ShowData.onclick = ShowData_onclick;
+        //ShowData.onclick = ShowData_onclick;
 
         InitializeGridControl();
     }
@@ -182,7 +180,10 @@ namespace TestGrad {
                 Grid.ESG.LastCounter = 0; 
                 Grid.ESG.LastCounterAdd = 0; 
                 BindGridControl(Grid);
-                 
+
+
+                setTimeout(function () { ShowData_onclick() }, 200);
+               
             }
         })
 
