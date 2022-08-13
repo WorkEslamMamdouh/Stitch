@@ -1074,24 +1074,14 @@
     <TypeScriptCompile Include="ClientApp\App.ts" />
     <TypeScriptCompile Include="ClientApp\ClientGeneralTools.ts" />
     <TypeScriptCompile Include="ClientApp\Quotation\TestGrad.ts" />
-    <TypeScriptCompile Include="ClientApp\Quotation\QuotationView.ts" />
-    <TypeScriptCompile Include="ClientApp\USERS\Users.ts" />
     <TypeScriptCompile Include="ClientApp\Entities.ts" />
-    <TypeScriptCompile Include="ClientApp\Pages\LoginAdmin.ts" />
-    <TypeScriptCompile Include="ClientApp\Pages\LoginComponent.ts" />
     <TypeScriptCompile Include="ClientApp\CustomEntities.ts" />
     <TypeScriptCompile Include="ClientApp\DataTable.ts" />
     <TypeScriptCompile Include="ClientApp\HomeComponent.ts" />
     <TypeScriptCompile Include="ClientApp\IgGrid.ts" />
     <TypeScriptCompile Include="ClientApp\JsGrid.ts" />
     <TypeScriptCompile Include="ClientApp\MessageBox.ts" />
-    <TypeScriptCompile Include="ClientApp\Pages\Login_.ts" />
-    <TypeScriptCompile Include="ClientApp\Partial\Background.ts" />
-    <TypeScriptCompile Include="ClientApp\Customer\CustomerCompany.ts" />
-    <TypeScriptCompile Include="ClientApp\Quotation\Quotation.ts" />
-    <TypeScriptCompile Include="ClientApp\Report_Page\Report_Page.ts" />
     <TypeScriptCompile Include="ClientApp\Shared.ts" />
-    <TypeScriptCompile Include="ClientApp\SystemTools.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>

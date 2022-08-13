@@ -4,14 +4,8 @@ $(document).ready(() => {
 })
 
 namespace TestGrad {
-
-    var sys: SystemTools = new SystemTools();
-    var SysSession: SystemSession = GetSystemSession(Modules.Quotation);
-    var I_D_UOMDetails: Array<I_D_UOM> = new Array<I_D_UOM>();
-    var compcode: number;//SharedSession.CurrentEnvironment.CompCode;
-    var BranchCode: number;//SharedSession.CurrentEnvironment.CompCode; 
-    var Grid: ESGrid = new ESGrid();
-    var SqlEn: SqlEnt = new SqlEnt();
+       
+    var Grid: ESGrid = new ESGrid(); 
 
     //var ShowData: HTMLButtonElement;
     var GenerateModels: HTMLButtonElement;
@@ -19,10 +13,7 @@ namespace TestGrad {
     var DataSours: HTMLSelectElement;
 
     export function InitalizeComponent() {
-
-        compcode = Number(SysSession.CurrentEnvironment.CompCode);
-        BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
-
+          
         //ShowData = document.getElementById('ShowData') as HTMLButtonElement
         GenerateModels = document.getElementById('GenerateModels') as HTMLButtonElement
         ConactServer = document.getElementById('ConactServer') as HTMLButtonElement 

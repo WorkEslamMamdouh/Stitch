@@ -21,14 +21,12 @@ namespace Inv.WebUI.App_Start
             //   "~/ClientApp/IgGrid.js"));
 
             bundles.Add(new ScriptBundle("~/Bundles/ClientApp")
-                .Include("~/ClientApp/AjaxCaller.js",
-                "~/ClientApp/SystemTools.js",
+                .Include("~/ClientApp/AjaxCaller.js", 
                 "~/ClientApp/Entities.js",
                 "~/ClientApp/Shared.js"));
 
             bundles.Add(new ScriptBundle("~/Bundles/ClientAppWithJsGrid")
-                .Include("~/ClientApp/AjaxCaller.js",
-                "~/ClientApp/SystemTools.js",
+                .Include("~/ClientApp/AjaxCaller.js", 
                 "~/ClientApp/Entities.js",
                 "~/ClientApp/Shared.js",
                 "~/ClientApp/JsGrid.js"));
@@ -97,11 +95,9 @@ namespace Inv.WebUI.App_Start
                 "~/ClientApp/Shared.js",
                 "~/ClientApp/App.js",
                 "~/ClientApp/JsGrid.js",
-                "~/Scripts/jsgrid/jsgrid.js",
-                "~/ClientApp/SystemTools.js",
+                "~/Scripts/jsgrid/jsgrid.js", 
                 "~/ClientApp/CustomEntities.js",
-                "~/ClientApp/MessageBox.js",
-                "~/ClientApp/HomeComponent.js"));
+                "~/ClientApp/MessageBox.js" ));
 
 
             bundles.Add(new ScriptBundle("~/Bundles/AppScript4")
@@ -114,8 +110,7 @@ namespace Inv.WebUI.App_Start
                "~/ClientApp/Shared.js",
                "~/ClientApp/App.js",
                "~/ClientApp/JsGrid.js",
-               "~/Scripts/jsgrid/jsgrid.js",
-               "~/ClientApp/SystemTools.js",
+               "~/Scripts/jsgrid/jsgrid.js", 
                "~/ClientApp/CustomEntities.js",
                "~/ClientApp/MessageBox.js"));
         }

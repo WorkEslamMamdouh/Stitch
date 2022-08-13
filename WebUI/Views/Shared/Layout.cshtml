@@ -23,8 +23,7 @@
       ============================================ -->
     @*<link rel="shortcut icon" type="image/x-icon" href="~/NewStyle/img/favicon.ico">*@
     <!-- Google Fonts
-        ============================================ -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i,800" rel="stylesheet">
+        ============================================ --> 
     <!-- Bootstrap CSS
         ============================================ -->
     <link rel="stylesheet" href="~/NewStyle/css/bootstrap.min.css">
@@ -133,133 +132,13 @@
     </div>
     <input type="hidden" id="GetActionUrl" name="name" value="@Url.Action("GetActionUrl","ClientTools")" />
     <input type="hidden" id="GetAPIUrl" name="name" value="@System.Configuration.ConfigurationManager.AppSettings["ServiceUrl"]" />
-    <div class="wrapper-pro">
-
-
-        <!-- Header top area start المنيو اللي فوق-->
-        <div class="content-inner-all">
-            <div class="header-top-area">
-                <div class="fixed-header-top">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-1 col-md-6 col-sm-6 col-xs-12">
-                                <button type="button" id="sidebarCollapse" class=" display_none btn bar-button-pro header-drl-controller-btn btn-info navbar-btn">
-                                    <i class="fa fa-bars"></i>
-                                </button>
-                                <div class="admin-logo logo-wrap-pro">
-                                    @*<a href="#">
-                                            <img src="~/NewStyle/img/logo.png" alt="" />
-                                        </a>*@
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-1 col-sm-1 col-xs-12">
-                                <div class="header-top-menu tabl-d-n">
-                                    <ul class="nav navbar-nav mai-top-nav">
-                                        <li class="nav-item">
-                                            <a id="btnHome" href="#" class="nav-link">Home</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a id="btnQuotation" key="Quotation" href="#" class="nav-link">Add quotation</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a id="btnQuotationView" key="QuotationView" href="#" class="nav-link">Quotations & invoice</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a id="btnCompanies" key="Companies" href="#" class="nav-link">Companies</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a id="btnUsers" key="Users" href="#" class="nav-link">Users</a>
-                                        </li>
-
-                                        <li class="nav-item display_none" @*style="display: none;"*@>
-
-                                            <a id="btnTest" key="Test" href="#" class="nav-link">Test Grad</a>
-
-                                        </li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
-                                <div class="header-right-info">
-                                    <ul class="nav navbar-nav mai-top-nav header-right-menu">
-
-
-                                        <li class="nav-item">
-                                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-                                                <span class="adminpro-icon adminpro-user-rounded header-riht-inf"></span>
-                                                <span id="Admin_name" class="admin-name"></span>
-                                                <span class="author-project-icon adminpro-icon adminpro-down-arrow"></span>
-                                            </a>
-                                            <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated flipInX">
-                                                <li>
-                                                    <a class="dropdown-item" href="#" id="btnUsers" data-toggle="modal" data-target="#user_setting"> Change Password<span id="btn_G_User" class="adminpro-icon adminpro-locked author-log-ic"></span>  </a>
-                                                </li>
-                                                <li>
-                                                    <a id="btn_loguotuser" href="#"><span class="adminpro-icon adminpro-locked author-log-ic"></span>Log Out</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="nav-item nav-setting-open display_none">
-                                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class=" display_none nav-link dropdown-toggle">
-                                            </a>
-
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Header top area end-->
-
-        </div>
-    </div>
-
+   
     <div id="cont" class="divcont">
         @RenderBody()
     </div>
 
 
-
-
-    <!--..............................user setting..................................................-->
-    <div class="modal fade" id="user_setting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Change Password </h4>
-                </div>
-                <div class="user_2">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-3 control-label"> OldPassword </label>
-                            <div class="col-sm-8">
-                                <input type="password" class="form-control" id="txtOldPassword">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-3 control-label">  NewPassword</label>
-                            <div class="col-sm-8">
-                                <input type="password" class="form-control" id="txtNewPassword">
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button type="button" id="btnChangePassword" class="btn btn-danger">comfirm </button>
-                        <button type="button" class="display_none btn btn-primary btn_back">رجوع</button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">close </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <input type="hidden" id="GetActionUrl" name="name" value="@Url.Action("GetActionUrl","ClientTools")" />
-    <input type="hidden" id="ModelPreview" name="name" value="" />
-    <input type="hidden" id="SearchControlName" name="name" value="" />
+     
     <div class="modal fade messagealert" id="MessageBoxDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -297,9 +176,7 @@
         </div>
     </div>
 
-    <div id="caret_script" style="display:none!important">
-    </div>
-
+     
 
     <script src="~/NewStyle/js/jquery.meanmenu.js"></script>
     <script src="~/NewStyle/js/jquery.mCustomScrollbar.concat.min.js"></script>
@@ -319,20 +196,7 @@
 
 
 
-
-    <div id="SearchBox" class=" fade styleserch" style="display:none;z-index:999999999;">
-        <div style="background-color: #03a9f0 !important; position: absolute; top: 0px; left: 0px; width: 100%; height: 40px; cursor: move; border-top-right-radius: 13px !important; border-top-left-radius: 13px !important; ">
-            <input type="button" onclick="$('#SearchBox').modal('hide');" id="btnCloseSearch" name="name" value="x" class="btn colose_lay_btn btn-danger" style="height: 40px;
-              width: 38px;font-size: 20px;float: left;border-color: #ef6603!important;background-color: #ffec09!important" />
-            <h4 id="searchTitle" class="col-xs-3" style="color: #fff;line-height: 36px;text-align:right"></h4>
-        </div>
-        <div style="overflow-x:scroll;overflow-y:scroll;padding-left: 1%; margin-top:20px;width:100%;left:0px;left: 0px; position: absolute; width: 100%; height: 85%;">
-            <div id="tableDiv" class="table table-bordered table-hover" style="width: 100%; color: #000000 !important;">
-
-            </div>
-        </div>
-    </div>
-
+     
     <script src="~/New_Design/LodBut/Loder.js"></script>
 
 </body>

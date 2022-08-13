@@ -3,20 +3,12 @@ $(document).ready(function () {
 });
 var TestGrad;
 (function (TestGrad) {
-    var sys = new SystemTools();
-    var SysSession = GetSystemSession(Modules.Quotation);
-    var I_D_UOMDetails = new Array();
-    var compcode; //SharedSession.CurrentEnvironment.CompCode;
-    var BranchCode; //SharedSession.CurrentEnvironment.CompCode; 
     var Grid = new ESGrid();
-    var SqlEn = new SqlEnt();
     //var ShowData: HTMLButtonElement;
     var GenerateModels;
     var ConactServer;
     var DataSours;
     function InitalizeComponent() {
-        compcode = Number(SysSession.CurrentEnvironment.CompCode);
-        BranchCode = Number(SysSession.CurrentEnvironment.BranchCode);
         //ShowData = document.getElementById('ShowData') as HTMLButtonElement
         GenerateModels = document.getElementById('GenerateModels');
         ConactServer = document.getElementById('ConactServer');
