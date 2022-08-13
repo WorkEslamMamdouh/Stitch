@@ -231,8 +231,8 @@ function BindGridControl(Grid) {
         '<table id="table_' + NameTable + '" data-toggle="table"   data-page-number="2" data-page-size="5"   data-pagination="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar">' +
         '<thead id="thead_' + NameTable + '">' +
         '<tr id="tr_' + NameTable + '">' +
-        '<th class="' + NameTable + '_Delete" data-field=""></th>' +
-        '<th class="' + NameTable + '_Copy" data-field=""></th>' +
+        '<th class="' + NameTable + '_Delete" style="width: 1%;" data-field=""></th>' +
+        '<th class="' + NameTable + '_Copy"  style="width: 1%;" data-field=""></th>' +
         '</tr>' +
         '</thead>' +
         '<tbody id="tbody_' + NameTable + '">' +
@@ -301,10 +301,10 @@ function BindGridControl(Grid) {
         $("#tr_" + NameTable).append(thead);
     }
     //------------------------------------------------------------تنظيم الجريد
-    Resizable();
+    Resizable(NameTable);
     //----------------------------------------------------------------------------------
-    $('.' + NameTable + '_Delete').attr('style', 'width: 4% !important;');
-    $('.' + NameTable + '_Copy').attr('style', 'width: 4% !important;');
+    $('.' + NameTable + '_Delete').attr('style', 'width: 1% !important;');
+    $('.' + NameTable + '_Copy').attr('style', 'width: 1% !important;');
     //---------------------------------------------------------------------------------اضافة هيكل body 
     for (var u = 0; u < Grid.Column.length; u++) {
         //--------------------------------------------اضافة style -----------------------------------
@@ -783,7 +783,7 @@ function EditGridControl(Grid) {
     $('#btnClean_' + NameTable).attr('style', '');
     $('#btnAdd_' + NameTable).attr('style', '');
     $('#btnEdit_' + NameTable).attr('style', 'display:none !important;');
-    Resizable();
+    Resizable(NameTable);
 }
 function CopyRow(Grid, index) {
     var obj = Grid.ESG.object;
@@ -899,73 +899,9 @@ function pageSize() {
         pageList: [5, 10, 25, 50, 100, 200] //list can be specified here
     });
 }
-function Resizable() {
-    //$('#table_Grad1').DataTable({
-    //    dom: 'Bfrtip',
-    //    lengthMenu: [
-    //        [10, 25, 50, -1],
-    //        ['10 rows', '25 rows', '50 rows', 'Show all']
-    //    ],
-    //    buttons: [
-    //        'pageLength'
-    //    ]
-    //});
-    //return
-    'use strict';
-    var initResizable = function (that) {
-        //Deletes the plugin to re-create it
-        that.$el.colResizable({ disable: true });
-        //Creates the plugin
-        that.$el.colResizable({
-            liveDrag: that.options.liveDrag,
-            fixed: that.options.fixed,
-            headerOnly: that.options.headerOnly,
-            minWidth: that.options.minWidth,
-            hoverCursor: that.options.hoverCursor,
-            dragCursor: that.options.dragCursor,
-            onResize: that.onResize,
-            onDrag: that.options.onResizableDrag
-        });
-    };
-    $.extend($.fn.bootstrapTable.defaults, {
-        resizable: false,
-        liveDrag: false,
-        fixed: true,
-        headerOnly: false,
-        minWidth: 15,
-        hoverCursor: 'e-resize',
-        dragCursor: 'e-resize',
-        PageSize: 3,
-        onResizableResize: function (e) {
-            return false;
-        },
-        onResizableDrag: function (e) {
-            return false;
-        }
-    });
-    var BootstrapTable = $.fn.bootstrapTable.Constructor, _toggleView = BootstrapTable.prototype.toggleView, _resetView = BootstrapTable.prototype.resetView;
-    BootstrapTable.prototype.toggleView = function () {
-        _toggleView.apply(this, Array.prototype.slice.apply(arguments));
-        if (this.options.resizable && this.options.cardView) {
-            //Deletes the plugin
-            $(this.$el).colResizable({ disable: true });
-        }
-    };
-    BootstrapTable.prototype.resetView = function () {
-        var that = this;
-        _resetView.apply(this, Array.prototype.slice.apply(arguments));
-        if (this.options.resizable) {
-            // because in fitHeader function, we use setTimeout(func, 100);
-            setTimeout(function () {
-                initResizable(that);
-            }, 300);
-        }
-    };
-    BootstrapTable.prototype.onResize = function (e) {
-        var that = $(e.currentTarget);
-        that.bootstrapTable('resetView');
-        that.data('bootstrap.table').options.onResizableResize.apply(e);
-    };
+function Resizable(NameTable) {
+    $('.' + NameTable + '_Delete').attr('style', 'width: 1% !important;');
+    $('.' + NameTable + '_Copy').attr('style', 'width: 1% !important;');
     $('[data-toggle="table"]').bootstrapTable();
 }
 //# sourceMappingURL=EslamGrid.js.map
