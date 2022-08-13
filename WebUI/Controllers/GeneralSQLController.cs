@@ -29,7 +29,7 @@ namespace Inv.WebUI.Controllers
             public SqlTables sqlTables = new SqlTables();
             public SqlEnt sqlEnt = new SqlEnt();
             public object Model = new object();
-        } 
+        }
         public class ClassName
         {
             public Dictionary<string, object> Dictionary { get; set; }
@@ -99,7 +99,7 @@ namespace Inv.WebUI.Controllers
 
 
         }
-        
+
         public JsonResult ShowData(string RepP)
         {
             ModelSql rp = JsonConvert.DeserializeObject<ModelSql>(RepP);
@@ -108,8 +108,8 @@ namespace Inv.WebUI.Controllers
             db.Database = rp.sqlEnt.Database;
             db.User = rp.sqlEnt.User;
             db.Password = rp.sqlEnt.Password;
-           string NameTable = rp.sqlTables.name;
-             
+            string NameTable = rp.sqlTables.name;
+
             StringBuilder models = new StringBuilder();
 
 
@@ -123,14 +123,14 @@ namespace Inv.WebUI.Controllers
                     command.CommandText = "select * from " + NameTable + "";
 
                     SqlDataReader reader = command.ExecuteReader();
-                     
+
                     var columns = db.SqlColumns.Where(f => f.object_id == rp.sqlTables.object_id).ToList();
-                     
+
                     int falgfrist = 0;
                     int falgfristM = 0;
-                     
-                     
-                    models.AppendLine("  [ "); 
+
+
+                    models.AppendLine("  [ ");
                     while (reader.Read())
                     {
 
@@ -150,26 +150,26 @@ namespace Inv.WebUI.Controllers
 
                             if (falgfrist == 0)
                             {
-                                models.AppendLine("\"" + column.name + "\"" +" : "+ "\"" + reader["" + column.name + ""] + "\"");
+                                models.AppendLine("\"" + column.name + "\"" + " : " + "\"" + reader["" + column.name + ""] + "\"");
                             }
                             else
                             {
                                 models.AppendLine(",\"" + column.name + "\"" + " : " + "\"" + reader["" + column.name + ""] + "\"");
                             }
 
-                            falgfrist = 1; 
+                            falgfrist = 1;
 
                         }
-                         
-                        models.AppendLine("}"); 
-                        falgfristM = 1; 
+
+                        models.AppendLine("}");
+                        falgfristM = 1;
                     }
-                     
+
                     models.AppendLine(" ] ");
-                     
+
                     connection.Close();
                     command.Dispose();
-                    connection.Dispose(); 
+                    connection.Dispose();
 
                 }
 
@@ -260,17 +260,17 @@ namespace Inv.WebUI.Controllers
             string jsonString = rp.Model.ToString();
 
             var json = JObject.Parse(jsonString);
-            List<object> NewModel = json["Model"].AsJEnumerable() 
+            List<object> NewModel = json["Model"].AsJEnumerable()
                                                                     .Select(t => t.ToObject<object>())
                                                                     .ToList();
 
             StringBuilder models = new StringBuilder();
 
-             
+
 
             using (SqlConnection connection = new SqlConnection("Data source = " + db.Server + " ; Initial catalog = " + db.Database + " ; User id = " + db.User + "; Password = " + db.Password + ";"))
             {
-                 
+
                 using (SqlCommand command = new SqlCommand())
                 {
 
@@ -356,51 +356,142 @@ namespace Inv.WebUI.Controllers
         private void AssignAndSave(List<object> Model, SqlTables table)
         {
             //List<object> Modell = Model;
-            foreach (Object obj in Model)
+            using (SqlConnection connection = new SqlConnection("Data source = " + db.Server + " ; Initial catalog = " + db.Database + " ; User id = " + db.User + "; Password = " + db.Password + ";"))
             {
 
-                returnQueryInsert(obj, table);
+                using (SqlCommand command = new SqlCommand())
+                {
+                    foreach (Object obj in Model)
+                    {
+                        command.Connection = connection;
+                        connection.Open();
 
+                        string ID = "";
+                        command.CommandText = @"select C.COLUMN_NAME FROM  
+                                                INFORMATION_SCHEMA.TABLE_CONSTRAINTS T  
+                                                JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE C  
+                                                ON C.CONSTRAINT_NAME=T.CONSTRAINT_NAME  
+                                                WHERE  
+                                                C.TABLE_NAME='" + table.name + "'  and T.CONSTRAINT_TYPE='PRIMARY KEY'  ";
+
+                        SqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            ID = reader["COLUMN_NAME"].ToString();
+                        }
+                        connection.Close(); 
+
+                        string qury = returnQueryInsert(obj, table, ID);
+                    
+
+                         
+                        connection.Open();
+                        command.CommandText = qury;
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                        command.Dispose();
+                        connection.Dispose();
+
+                    }
+                }
             }
 
         }
 
- 
-        private string returnQueryInsert( object obj , SqlTables table)
+
+        private string returnQueryInsert(object obj, SqlTables table, string ID)
         {
+            int flagfrist = 0;
             StringBuilder models = new StringBuilder();
-            //models.AppendLine("constructor()")
-            //    .AppendLine("{");
-            int falgfrist = 0;
+            StringBuilder where = new StringBuilder();
+            var json_serializer = new JavaScriptSerializer();
+            var routes_list = (IDictionary<string, object>)json_serializer.DeserializeObject(obj.ToString());
 
             var columns = db.SqlColumns.Where(f => f.object_id == table.object_id).ToList();
-            foreach (SqlColumns column in columns)
+
+            string StatusFlag = routes_list["StatusFlag"].ToString();
+            string TableID = routes_list[ID].ToString();
+
+            if (StatusFlag == "i") //insert
             {
+                models.AppendLine("insert into " + table.name + " values( ");
+                foreach (SqlColumns column in columns)
+                {
 
-                //var value = obj.GetType().GetProperty(propertyName).GetValue(obj, null);
-                string propertyName = column.name;
-                var type = obj.GetType();
-                string value = "";
-
-                var result = JsonConvert.DeserializeObject<T>(obj.ToString());
-
-                var json_serializer = new JavaScriptSerializer();
-                var routes_list = (IDictionary<string, object>)json_serializer.DeserializeObject(obj.ToString());
-                value = routes_list[column.name].ToString();
-
-                //var json = JObject.Parse(bytes);
-                //List<object> NewModel = json["obj"].AsJEnumerable().Where(x => x[column.name] != null)
-                //                                                        .Select(t => t.ToObject<object>())
-                //                                                        .ToList();
-
-                //value = NewModel.Select(t => t[column.name]).FirstOrDefault();
+                    string propertyName = column.name;
+                    var type = obj.GetType();
+                    string value = "";
 
 
+                    value = routes_list[column.name].ToString();
 
-                models.AppendLine(value.ToString());
+
+                    if (flagfrist == 0)
+                    {
+                        models.Append("'" + value.ToString() + "'");
+
+                    }
+                    else
+                    {
+                        models.Append(",'" + value.ToString() + "'");
+                    }
+
+
+                    flagfrist = 1;
+                }
+                models.Append(" ) ");
 
             }
-            //models.AppendLine("}");
+            if (StatusFlag == "u")//update
+            {
+
+                models.AppendLine("update " + table.name + " set ");
+                //where.AppendLine("where " + TableID + " = ");
+                foreach (SqlColumns column in columns)
+                {
+
+                    string propertyName = column.name;
+                    var type = obj.GetType();
+                    string value = "";
+
+
+                    value = routes_list[column.name].ToString();
+
+
+                    if (column.name != ID)
+                    {
+
+                        if (flagfrist == 0)
+                        {
+                            models.Append("" + column.name + " = '" + value.ToString() + "'");
+
+                        }
+                        else
+                        {
+                            models.Append("," + column.name + " = '" + value.ToString() + "'");  
+                        }
+                        flagfrist = 1;
+                    }
+                    else
+                    {
+                        where.Append(" where " + column.name + " = '" + value.ToString() + "'");
+                    }
+
+                   
+                }
+                models.Append(where);
+
+            }
+            if (StatusFlag == "d")
+            {
+
+
+            }
+
+
+
+
+
 
             return models.ToString();
 
@@ -418,7 +509,7 @@ namespace Inv.WebUI.Controllers
                 return new BinaryFormatter().Deserialize(ms);
             }
         }
-    
+
         public string GetPropertyValue(string propertyName)
         {
             try
@@ -456,7 +547,7 @@ namespace Inv.WebUI.Controllers
 
                 if (falgfrist == 0)
                 {
-                    models.AppendLine("\"" + column.name + "\"" + value); 
+                    models.AppendLine("\"" + column.name + "\"" + value);
                 }
                 else
                 {
@@ -471,7 +562,7 @@ namespace Inv.WebUI.Controllers
 
         }
 
- 
+
 
 
         private string GenerateConstructor(SqlTables table)
