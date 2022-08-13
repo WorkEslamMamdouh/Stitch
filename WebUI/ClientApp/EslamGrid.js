@@ -467,7 +467,10 @@ function BuildGridControl(flagDisplay, Grid) {
         }
         ;
         if (Grid.Column[u].ColumnType.NameType == 'Input') {
-            td = '<td id="td_' + NameTable + '_' + Grid.Column[u].Name + cnt + '" ><input  disabled="disabled" id="' + NameTable + '_' + Grid.Column[u].Name + cnt + '" value="' + Grid.Column[u].value + '" type="' + Grid.Column[u].Type + '" class="form-control ' + classEdit + '" placeholder="' + Grid.Column[u].value + '" /></td>';
+            td = '<td id="td_' + NameTable + '_' + Grid.Column[u].Name + cnt + '" >' +
+                //'<input  disabled="disabled" id = "' + NameTable + '_' + Grid.Column[u].Name + cnt + '" value = "' + Grid.Column[u].value + '" type = "' + Grid.Column[u].Type + '" class="form-control ' + classEdit + '" placeholder = "' + Grid.Column[u].value + '" /> ' +
+                '<textarea style="height: 35px;" disabled="disabled" id = "' + NameTable + '_' + Grid.Column[u].Name + cnt + '"  class="form-control ' + classEdit + '" placeholder = "' + Grid.Column[u].value + '"  >' + Grid.Column[u].value + '</textarea> ' +
+                '</td>';
             $('#No_Row_' + NameTable + cnt + '').append(td);
         }
         if (Grid.Column[u].ColumnType.NameType == 'Dropdown') {

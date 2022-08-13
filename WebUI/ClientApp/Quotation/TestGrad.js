@@ -138,6 +138,30 @@ var TestGrad;
         debugger;
         alert(Grid.ESG.Model);
         console.log(Grid.ESG.Model);
+        var model = new SqlTables();
+        var modelSql = new ModelSql();
+        var rp = new SqlEnt();
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+        model.name = $("#DataSours option:selected").text();
+        model.object_id = $('#DataSours').val();
+        modelSql.sqlTables = model;
+        modelSql.sqlEnt = rp;
+        modelSql.Model = Grid.ESG.Model;
+        var _Data = JSON.stringify(modelSql);
+        Ajax.CallAsync({
+            url: Url.Action("InsetData", "GeneralSQL"),
+            data: { RepP: _Data },
+            success: function (d) {
+                var result = d;
+                debugger;
+                var res = result;
+                var Model = JSON.parse(res);
+                DisplayDataGridControl(Model, Grid);
+            }
+        });
     }
     function computeTotal() {
         console.log(Grid.ESG.TotalModel);

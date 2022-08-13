@@ -62,9 +62,7 @@ namespace TestGrad {
     function GenerateModels_onclick() {
         GenerateMode();
     }
-
-
-
+     
     function ShowData_onclick() {
 
 
@@ -212,6 +210,49 @@ namespace TestGrad {
         alert(Grid.ESG.Model)
 
         console.log(Grid.ESG.Model)
+
+
+
+
+
+        let model: SqlTables = new SqlTables();
+        let modelSql: ModelSql = new ModelSql();
+
+        let rp: SqlEnt = new SqlEnt();
+
+        rp.Database = $('#Database').val();
+        rp.Server = $('#Server').val();
+        rp.Password = $('#Password').val();
+        rp.User = $('#User').val();
+
+        model.name = $("#DataSours option:selected").text();
+        model.object_id = $('#DataSours').val();
+
+
+        modelSql.sqlTables = model;
+        modelSql.sqlEnt = rp;
+        modelSql.Model = Grid.ESG.Model;
+
+        let _Data: string = JSON.stringify(modelSql);
+
+        Ajax.CallAsync({
+            url: Url.Action("InsetData", "GeneralSQL"),
+            data: { RepP: _Data },
+            success: (d) => {
+                let result = d
+                debugger
+                let res = result
+
+                var Model: Array<any> = JSON.parse(res);
+
+                DisplayDataGridControl(Model, Grid);
+
+
+            }
+        })
+
+
+
     }
     function computeTotal() {
         console.log(Grid.ESG.TotalModel);

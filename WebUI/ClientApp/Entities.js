@@ -1167,6 +1167,7 @@ var ModelSql = /** @class */ (function () {
     function ModelSql() {
         this.sqlTables = new SqlTables();
         this.sqlEnt = new SqlEnt();
+        this.Model = new Array();
     }
     return ModelSql;
 }());

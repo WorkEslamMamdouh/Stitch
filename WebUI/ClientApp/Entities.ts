@@ -1926,9 +1926,11 @@ class ModelSql  {
     constructor() { 
         this.sqlTables = new SqlTables();
         this.sqlEnt = new SqlEnt();
+        this.Model = new Array<any>();
     }
     public sqlTables: SqlTables;
     public sqlEnt: SqlEnt;
+    public Model: Array<any>;
 }
 
  
