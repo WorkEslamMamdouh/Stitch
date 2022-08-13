@@ -116,7 +116,8 @@ var TestGrad;
                 Grid.ESG.LastCounter = 0;
                 Grid.ESG.LastCounterAdd = 0;
                 BindGridControl(Grid);
-                setTimeout(function () { ShowData_onclick(); }, 200);
+                ShowData_onclick();
+                //setTimeout(function () {  }, 200);
             }
         });
     }
