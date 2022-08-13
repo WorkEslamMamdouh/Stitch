@@ -342,7 +342,7 @@ function BindGridControl(Grid: ESGrid) {
         '<br />' +
         '<br />' +
 
-        '<div class=" btn-group project-list-action" style="width: 20%;">' +
+        '<div class=" btn-group project-list-action"  >' +
         '<input type="text" id="Search_' + NameTable + '"  class="Search_grid" placeholder="Search for names.." title="Type in a name">' +
         '</div>' +
 

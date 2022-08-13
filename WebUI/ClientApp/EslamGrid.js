@@ -225,7 +225,7 @@ function BindGridControl(Grid) {
         '</div>' +
         '<br />' +
         '<br />' +
-        '<div class=" btn-group project-list-action" style="width: 20%;">' +
+        '<div class=" btn-group project-list-action"  >' +
         '<input type="text" id="Search_' + NameTable + '"  class="Search_grid" placeholder="Search for names.." title="Type in a name">' +
         '</div>' +
         '<table id="table_' + NameTable + '" data-toggle="table"   data-page-number="2" data-page-size="5"   data-pagination="true" data-resizable="true" data-cookie="true" data-cookie-id-table="saveId" data-show-export="false" data-click-to-select="true" data-toolbar="#toolbar">' +
