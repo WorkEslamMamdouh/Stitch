@@ -59,7 +59,9 @@ class ESG {
         this.Right = true;
         this.object = new Object();
         this.TotalModel = new Object();
-        this.Model = new Array<any>();
+        this.Model = {
+            Model: []
+        };
         this.OnfunctionSave;
         this.OnfunctionTotal;
         this.OnRowDoubleClicked;
@@ -81,7 +83,7 @@ class ESG {
     public Right: boolean;
     public object: any
     public TotalModel: any
-    public Model: Array<any>;
+    public Model: any;
     public OnfunctionSave?: () => void;
     public OnfunctionTotal?: () => void;
     public OnRowDoubleClicked?: () => void;
@@ -895,6 +897,16 @@ function CleanGridControl(List: Array<any>, Grid: ESGrid) {
     $('[data-toggle="table"]').bootstrapTable();
 }
 
+
+var DetailsModel = {
+    Model: []
+};
+
+function addToArray(name, index, value) {
+    DetailsModel[name][index] = value;
+}
+
+
 function AssignGridControl(Grid: ESGrid, Newobject: object) {
 
 
@@ -904,11 +916,16 @@ function AssignGridControl(Grid: ESGrid, Newobject: object) {
     let LastCountGrid = Grid.ESG.LastCounter;
 
 
-    var DetailsModel = new Array<any>();
+    //var DetailsModel = new Array<any>();
 
+      DetailsModel = {
+        Model: []
+    };
 
     debugger
     let Model = JSON.parse(JSON.stringify(obj));
+
+    let index = 0;
 
     for (var i = 0; i < LastCountGrid; i++) {
         debugger
@@ -921,21 +938,27 @@ function AssignGridControl(Grid: ESGrid, Newobject: object) {
 
             GActions.AssignToModel(Model, NameTable, cnt, StatusFlag)
             Model.StatusFlag = StatusFlag;
-            DetailsModel.push(Model);
+            addToArray('Model', index, Model)
+            //DetailsModel.push(Model);
+            index++;
         }
 
         if (StatusFlag == "u") {
 
             GActions.AssignToModel(Model, NameTable, cnt, StatusFlag)
             Model.StatusFlag = StatusFlag;
-            DetailsModel.push(Model);
+            //DetailsModel.push(Model);
+            addToArray('Model', index, Model)
+            index++;
         }
 
         if (StatusFlag == "d") {
 
             GActions.AssignToModel(Model, NameTable, cnt, StatusFlag)
             Model.StatusFlag = StatusFlag;
-            DetailsModel.push(Model);
+            //DetailsModel.push(Model);
+            addToArray('Model', index, Model)
+            index++;
         }
 
 
@@ -948,6 +971,7 @@ function AssignGridControl(Grid: ESGrid, Newobject: object) {
     return DetailsModel;
 
 }
+
 
 
 function ErrorinputGrid(input: any, NameTable: string, Mess: string) {
@@ -1295,6 +1319,10 @@ function BuildCopy(Grid: ESGrid, List: any, cnt: number) {
 
 }
 
+
+
+
+
 var GActions = {
 
 
@@ -1309,8 +1337,10 @@ var GActions = {
             if (element != null) {
                 if (element.type == "checkbox")
                     Model[property] = element.checked;
+                    //addToArray('Model', property, element.checked)
                 else
                     Model[property] = element.value;
+                    //addToArray('Model', property, element.value)
             }
         }
 

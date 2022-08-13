@@ -205,14 +205,18 @@ namespace TestGrad {
          
         //DisplayDataGridControl(I_D_UOMDetails, Grid);
     }
+
+
+
     function SaveNew() {
         debugger
         alert(Grid.ESG.Model)
 
         console.log(Grid.ESG.Model)
 
+     
 
-
+         
 
 
         let model: SqlTables = new SqlTables();

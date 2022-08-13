@@ -13,6 +13,11 @@ using System.Data.SqlClient;
 using System;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NPOI.SS.Formula.Functions;
+using System.Web.Script.Serialization;
 
 namespace Inv.WebUI.Controllers
 {//eslam 1 dec 2020
@@ -23,7 +28,7 @@ namespace Inv.WebUI.Controllers
         {
             public SqlTables sqlTables = new SqlTables();
             public SqlEnt sqlEnt = new SqlEnt();
-            public List<object> Model = new List<object>();
+            public object Model = new object();
         } 
         public class ClassName
         {
@@ -250,8 +255,14 @@ namespace Inv.WebUI.Controllers
             db.User = rp.sqlEnt.User;
             db.Password = rp.sqlEnt.Password;
             string NameTable = rp.sqlTables.name;
-            var table = rp.sqlTables; 
+            var table = rp.sqlTables;
 
+            string jsonString = rp.Model.ToString();
+
+            var json = JObject.Parse(jsonString);
+            List<object> NewModel = json["Model"].AsJEnumerable() 
+                                                                    .Select(t => t.ToObject<object>())
+                                                                    .ToList();
 
             StringBuilder models = new StringBuilder();
 
@@ -268,7 +279,7 @@ namespace Inv.WebUI.Controllers
 
 
 
-                    AssignAndSave(rp.Model, table);
+                    AssignAndSave(NewModel, table);
 
 
                     //------------------------------------------------ShowData--------------------------------------------
@@ -344,14 +355,14 @@ namespace Inv.WebUI.Controllers
 
         private void AssignAndSave(List<object> Model, SqlTables table)
         {
-
+            //List<object> Modell = Model;
             foreach (Object obj in Model)
             {
 
-                returnQueryInsert(obj, table); 
-                 
+                returnQueryInsert(obj, table);
+
             }
-  
+
         }
 
  
@@ -369,38 +380,22 @@ namespace Inv.WebUI.Controllers
                 //var value = obj.GetType().GetProperty(propertyName).GetValue(obj, null);
                 string propertyName = column.name;
                 var type = obj.GetType();
-                string value;
+                string value = "";
 
-                //obj = GetPropertyValue(obj, column.name); 
-                //var makeValue = (string)obj.GetPropertyValue("Make"); 
-                var json = JObject.Parse(obj.ToString());
-               var transactionsWithAccountBalance = json[""].AsJEnumerable()
-                                                        .Where(t => t[column.name] != null) 
-                                                        .ToList();
+                var result = JsonConvert.DeserializeObject<T>(obj.ToString());
 
-                foreach (var item in json["json"])
-                {
-                    if (item[column.name] != null)
-                    {
-                        value = item[column.name].Value<string>();
-                    }
-                }
+                var json_serializer = new JavaScriptSerializer();
+                var routes_list = (IDictionary<string, object>)json_serializer.DeserializeObject(obj.ToString());
+                value = routes_list[column.name].ToString();
+
+                //var json = JObject.Parse(bytes);
+                //List<object> NewModel = json["obj"].AsJEnumerable().Where(x => x[column.name] != null)
+                //                                                        .Select(t => t.ToObject<object>())
+                //                                                        .ToList();
+
+                //value = NewModel.Select(t => t[column.name]).FirstOrDefault();
 
 
-                Type myType = obj.GetType();
-                IList<PropertyInfo> props = new List<PropertyInfo>(myType.GetProperties());
-
-                foreach (PropertyInfo prop in props)
-                {
-                    object propValue = prop.GetValue(obj, null);
-
-                    // Do something with propValue
-                }
-
-                //var y = obj.ToPropertyType()
-                var x = obj.GetType().GetRuntimeProperties().FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
-                
-                value = (string)type.GetProperty(propertyName).GetValue(obj, null);
 
                 models.AppendLine(value.ToString());
 
@@ -410,6 +405,20 @@ namespace Inv.WebUI.Controllers
             return models.ToString();
 
         }
+
+
+
+        public object ToClassString(string base64String)
+        {
+            byte[] bytes = Convert.FromBase64String(base64String);
+            using (MemoryStream ms = new MemoryStream(bytes, 0, bytes.Length))
+            {
+                ms.Write(bytes, 0, bytes.Length);
+                ms.Position = 0;
+                return new BinaryFormatter().Deserialize(ms);
+            }
+        }
+    
         public string GetPropertyValue(string propertyName)
         {
             try

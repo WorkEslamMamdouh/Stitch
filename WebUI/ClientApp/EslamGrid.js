@@ -49,7 +49,9 @@ var ESG = /** @class */ (function () {
         this.Right = true;
         this.object = new Object();
         this.TotalModel = new Object();
-        this.Model = new Array();
+        this.Model = {
+            Model: []
+        };
         this.OnfunctionSave;
         this.OnfunctionTotal;
         this.OnRowDoubleClicked;
@@ -579,13 +581,23 @@ function CleanGridControl(List, Grid) {
     DisplayDataGridControl(List, Grid);
     $('[data-toggle="table"]').bootstrapTable();
 }
+var DetailsModel = {
+    Model: []
+};
+function addToArray(name, index, value) {
+    DetailsModel[name][index] = value;
+}
 function AssignGridControl(Grid, Newobject) {
     var obj = Grid.ESG.object;
     var NameTable = Grid.ESG.NameTable;
     var LastCountGrid = Grid.ESG.LastCounter;
-    var DetailsModel = new Array();
+    //var DetailsModel = new Array<any>();
+    DetailsModel = {
+        Model: []
+    };
     debugger;
     var Model = JSON.parse(JSON.stringify(obj));
+    var index = 0;
     for (var i = 0; i < LastCountGrid; i++) {
         debugger;
         var cnt = i;
@@ -594,17 +606,23 @@ function AssignGridControl(Grid, Newobject) {
         if (StatusFlag == "i") {
             GActions.AssignToModel(Model, NameTable, cnt, StatusFlag);
             Model.StatusFlag = StatusFlag;
-            DetailsModel.push(Model);
+            addToArray('Model', index, Model);
+            //DetailsModel.push(Model);
+            index++;
         }
         if (StatusFlag == "u") {
             GActions.AssignToModel(Model, NameTable, cnt, StatusFlag);
             Model.StatusFlag = StatusFlag;
-            DetailsModel.push(Model);
+            //DetailsModel.push(Model);
+            addToArray('Model', index, Model);
+            index++;
         }
         if (StatusFlag == "d") {
             GActions.AssignToModel(Model, NameTable, cnt, StatusFlag);
             Model.StatusFlag = StatusFlag;
-            DetailsModel.push(Model);
+            //DetailsModel.push(Model);
+            addToArray('Model', index, Model);
+            index++;
         }
     }
     debugger;
@@ -835,8 +853,10 @@ var GActions = {
             if (element != null) {
                 if (element.type == "checkbox")
                     Model[property] = element.checked;
+                //addToArray('Model', property, element.checked)
                 else
                     Model[property] = element.value;
+                //addToArray('Model', property, element.value)
             }
         }
         return Model;
