@@ -36,7 +36,6 @@ var AjaxCaller = /** @class */ (function () {
             success: function (d) {
                 var result = d.result;
                 if (result.ResponseState == true) {
-                    SharedWork.SwitchModes(ScreenModes.Query);
                 }
                 else {
                     setTimeout(function () { MessageBox.Show(result.ResponseMessage, actionName); }, 300);

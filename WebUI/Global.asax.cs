@@ -1,6 +1,5 @@
 ﻿using Inv.WebUI.App_Start;
-using Inv.WebUI.Controllers;
-using Inv.WebUI.Tools;
+using Inv.WebUI.Controllers; 
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -40,31 +39,7 @@ namespace Inv.WebUI
 
         //}
 
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-           
-            if (HttpContext.Current.Request.Cookies["Inv1_systemProperties"] != null && HttpContext.Current.Request.Cookies["Inv1_systemProperties"].Value != "null")
-            {
-                string systemProperties = HttpContext.Current.Request.Cookies["Inv1_systemProperties"].Value.ToString();
-
-                var Lang = JsonConvert.DeserializeObject<SystemEnvironment>(systemProperties).ScreenLanguage;
-
-                DateTimeFormatInfo usDtfi = new CultureInfo("en-GB", false).DateTimeFormat;
-                usDtfi.ShortDatePattern = "dd/MM/yyyy";
-                usDtfi.FirstDayOfWeek = DayOfWeek.Sunday;
-                if (Lang != null)
-                {
-                    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(Lang);
-                    System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat = usDtfi;
-                    System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Lang);
-                    System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat = usDtfi;
-                 
-                }
-            }
-
- 
-        }
-
+    
 
     }
 }

@@ -31,17 +31,7 @@ namespace Inv.WebUI.Controllers
         {
             return View();
         }
-        public JsonResult AdminHome_()
-        {
-
-            var obj = new
-            {
-                url = Url.Action("AdminHome", "Home")
-
-            };
-            var result = Shared.JsonObject(obj);
-            return result;
-        }
+  
         public ActionResult HomeIndexPackage()
         {
 

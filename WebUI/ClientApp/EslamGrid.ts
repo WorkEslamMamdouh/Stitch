@@ -165,7 +165,7 @@ interface String {
 
 var Valid = {
 
-    Set: function (valid: boolean, Mess?: string , conation?: Con, Value?: string): Valid_Con {
+    Set: function (valid: boolean, Mess?: string, conation?: Con, Value?: string): Valid_Con {
 
         var Valid_Co: Valid_Con = new Valid_Con();
 
@@ -217,16 +217,16 @@ namespace ControlType {
 
     String.prototype.html = function (value: any, Grid: ESGrid): any {
         let NameFild = this;
-       
-            $('#' + Grid.ESG.NameTable + '_' + NameFild + Grid.ESG.RowCnt + '').html(value)
-        
+
+        $('#' + Grid.ESG.NameTable + '_' + NameFild + Grid.ESG.RowCnt + '').html(value)
+
         return (value);
     };
     String.prototype.append = function (value: any, Grid: ESGrid): any {
         let NameFild = this;
-       
-            $('#' + Grid.ESG.NameTable + '_' + NameFild + Grid.ESG.RowCnt + '').append(value)
-        
+
+        $('#' + Grid.ESG.NameTable + '_' + NameFild + Grid.ESG.RowCnt + '').append(value)
+
         return (value);
     };
 
@@ -328,16 +328,16 @@ function BindGridControl(Grid: ESGrid) {
         '<button id="btnEdit_' + NameTable + '" type="button" class="btn btn-custon-four btn-success"><i class="fa fa-save"></i>&nbsp; Edit</button>' +
         '<button id="btnsave_' + NameTable + '" type="button" class="btn btn-custon-four btn-success"><i class="fa fa-save"></i>&nbsp; save</button>' +
         '<button id="btnClean_' + NameTable + '" type="button" class="btn btn-custon-four btn-danger" style="background-color: sandybrown;"><i class="fa fa-refresh"></i>  Back</button>' +
-        '</div>' + 
+        '</div>' +
         '<br />' +
         '<div class=" btn-group project-list-action">' +
         '<button id="btnAdd_' + NameTable + '" class="btn btn-custon-four btn-success oo"><i class="fa fa-plus"></i></button>' +
         '</div>' +
         '<div class=" btn-group project-list-action" style="width: 20%;">' +
         '</div>' +
-         
-        '<div id="DivMassage_' + NameTable +'"  class=" btn-group project-list-action" style="width: 55%;background-color: brown;color: white;font-weight: bold;text-align: center;border-radius: 50px;">' +
-        '<h3 id="TextMassage_' + NameTable+'">Message</h3> ' +
+
+        '<div id="DivMassage_' + NameTable + '"  class=" btn-group project-list-action" style="width: 55%;background-color: brown;color: white;font-weight: bold;text-align: center;border-radius: 50px;">' +
+        '<h3 id="TextMassage_' + NameTable + '">Message</h3> ' +
         '</div>' +
         '<br />' +
         '<br />' +
@@ -370,7 +370,7 @@ function BindGridControl(Grid: ESGrid) {
 
     $('#btnAdd_' + NameTable).click(function (e) {
         BuildGridControl(true, Grid);
-        
+
         Grid.ESG.LastCounterAdd = Grid.ESG.LastCounter;
 
     });
@@ -402,20 +402,20 @@ function BindGridControl(Grid: ESGrid) {
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
             debugger
-           let tds = tr[i].getElementsByTagName("td");
+            let tds = tr[i].getElementsByTagName("td");
 
 
             for (var u = 0; u < tds.length; u++) {
 
                 td = tr[i].getElementsByTagName("td")[u];
-                 
+
                 if (td) {
                     try {
                         debugger
 
                         td = document.getElementById(td.children[0].id);
 
-                        txtValue =   td.value;
+                        txtValue = td.value;
                         if (txtValue.toUpperCase().indexOf(filter) > -1) {
                             //alert(txtValue)
                             tr[i].style.display = "";
@@ -429,7 +429,7 @@ function BindGridControl(Grid: ESGrid) {
                 }
 
             }
-            
+
         }
     });
 
@@ -757,23 +757,26 @@ function BuildGridControl(flagDisplay: boolean, Grid: ESGrid) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
 
+            if (Grid.Column[u].ColumnType.onclick != null) {
+                Grid.Column[u].ColumnType.onclick();
 
-            Grid.Column[u].ColumnType.onclick();
+            }
         });
 
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').on('keyup', function (e) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-
-            Grid.Column[u].ColumnType.onkeyup();
+            if (Grid.Column[u].ColumnType.onkeyup != null) {
+                Grid.Column[u].ColumnType.onkeyup();
+            }
         });
 
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').on('change', function (e) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-
-            Grid.Column[u].ColumnType.onchange();
-
+            if (Grid.Column[u].ColumnType.onchange != null) {
+                Grid.Column[u].ColumnType.onchange();
+            }
             ComputeTotalGridControl(Grid, Grid.ESG.object);
         });
 
@@ -924,7 +927,7 @@ function AssignGridControl(Grid: ESGrid, Newobject: object) {
 
     //var DetailsModel = new Array<any>();
 
-      DetailsModel = {
+    DetailsModel = {
         Model: []
     };
 
@@ -983,7 +986,7 @@ function AssignGridControl(Grid: ESGrid, Newobject: object) {
 function ErrorinputGrid(input: any, NameTable: string, Mess: string) {
 
     $('#DivMassage_' + NameTable).removeClass('display_hidden');
-    $('#TextMassage_' + NameTable).html(Mess); 
+    $('#TextMassage_' + NameTable).html(Mess);
 
     if (input.selector != null) {
 
@@ -1039,12 +1042,12 @@ function ValidationGrid(Grid: ESGrid, Newobject: object) {
 
                 if (Model.ColumnType.NameType == 'Input') {
 
-                  
+
 
                     if (con[0] == '>') {
 
                         if (Number(element.value) > Number(Con_Value)) {
-                            ErrorinputGrid(element, NameTable,Mess);
+                            ErrorinputGrid(element, NameTable, Mess);
                             FlagValid = false;
                             break
                         }
@@ -1343,10 +1346,10 @@ var GActions = {
             if (element != null) {
                 if (element.type == "checkbox")
                     Model[property] = element.checked;
-                    //addToArray('Model', property, element.checked)
+                //addToArray('Model', property, element.checked)
                 else
                     Model[property] = element.value;
-                    //addToArray('Model', property, element.value)
+                //addToArray('Model', property, element.value)
             }
         }
 

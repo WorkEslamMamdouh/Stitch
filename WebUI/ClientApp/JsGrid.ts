@@ -14,8 +14,7 @@
 
     return d.promise();
 };
-class JsGrid {
-    public SysSession = GetSystemSession('Home');
+class JsGrid { 
     public ElementName: string;
 
     public Inserting: boolean;
@@ -117,8 +116,7 @@ class JsGrid {
             pageSize: this.PageSize,
 
             data: this.DataSource,
-            confirmDeleting: true,//this.ConfirmDeleteing,
-            deleteConfirm: this.SysSession.CurrentEnvironment.ScreenLanguage == "ar" ? "هل متأكد من الحذف" : "Are you sure ?",
+            confirmDeleting: true,//this.ConfirmDeleteing, 
             fields: this.Columns,
             //controller: {
             //    data : this.DataSource,

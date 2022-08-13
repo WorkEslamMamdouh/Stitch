@@ -30,35 +30,17 @@ function IsNullOrEmpty(value) {
     else
         return false;
 }
-function GetIndexByUseId(idValue, BaseTableName, idFieldName, Condition) {
-    var result = "";
-    if (IsNullOrEmpty(idValue.toString()) || IsNullOrEmpty(BaseTableName) || IsNullOrEmpty(idFieldName)) {
-        return result;
-    }
-    else {
-        var sys = new SystemTools;
-        var result_1 = "";
-        Ajax.Callsync({
-            url: sys.apiUrl("SystemTools", "GetIndexByUseId"),
-            data: { idValue: idValue.toString(), BaseTableName: BaseTableName, idFieldName: idFieldName, Condition: Condition },
-            success: function (d) {
-                result_1 = d;
-            }
-        });
-        return result_1;
-    }
-}
 function GetIndexByUseCode(idValue, BaseTableName, idFieldName, condition) {
     var result = "";
     if (IsNullOrEmpty(idValue.toString()) || IsNullOrEmpty(BaseTableName) || IsNullOrEmpty(idFieldName)) {
         return result;
     }
     else {
-        var result_2 = Ajax.Call({
+        var result_1 = Ajax.Call({
             url: Url.Action("GetIndexByUseCode", "ClientTools"),
             data: { idValue: idValue.toString(), BaseTableName: BaseTableName, idFieldName: idFieldName, condition: condition }
         });
-        return result_2;
+        return result_1;
     }
 }
 var SearchModulesNames = {
@@ -96,96 +78,6 @@ function Fixed(value) {
 }
 var App;
 (function (App) {
-    var branchCodeSelected = "";
-    var LanguageButton;
-    function AssignLoginInformation() {
-        var Env = GetSystemEnvironment();
-        if (DocumentActions.GetElementById("infoSysName") != null)
-            DocumentActions.GetElementById("infoSysName").innerText = Env.SystemCode;
-        if (DocumentActions.GetElementById("infoSubSysName") != null)
-            DocumentActions.GetElementById("infoSubSysName").innerText = Env.SubSystemCode;
-        if (DocumentActions.GetElementById("infoCompanyName") != null) {
-            if (Env.ScreenLanguage == "ar")
-                DocumentActions.GetElementById("infoCompanyName").innerText = Env.CompanyNameAr;
-            else
-                DocumentActions.GetElementById("infoCompanyName").innerText = Env.CompanyName;
-        }
-        if (DocumentActions.GetElementById("infoCurrentYear") != null)
-            DocumentActions.GetElementById("infoCurrentYear").innerText = Env.CurrentYear;
-        if (DocumentActions.GetElementById("infoUserCode") != null)
-            DocumentActions.GetElementById("infoUserCode").innerText = Env.UserCode;
-    }
-    function Startup() {
-        var Env = GetSystemEnvironment();
-        try {
-            var SpanUserName = DocumentActions.GetElementById("SpanUserName");
-            SpanUserName.innerText = Env.UserCode;
-            SpanUserName.style.display = "block";
-            SpanUserName.onclick = GetBranchs;
-        }
-        catch (e) {
-        }
-        var btnEditUserBranchs;
-        try {
-            btnEditUserBranchs = DocumentActions.GetElementById("btnEditUserBranchs");
-            btnEditUserBranchs.onclick = EnableBranchSelected;
-        }
-        catch (e) {
-        }
-        //var btnChangeBranch: HTMLButtonElement;
-        //try {
-        //    btnChangeBranch = DocumentActions.GetElementById<HTMLButtonElement>("btnChangeBranch");
-        //    btnChangeBranch.onclick = ChangeBranch;
-        //} catch (e) {
-        //}
-        AssignLoginInformation();
-        try {
-            LanguageButton = DocumentActions.GetElementById("LanguageButton");
-            LanguageButton.onclick = LanguageButton_Click;
-        }
-        catch (e) {
-        }
-        try {
-            DocumentActions.GetElementById("btnChangePassword").onclick = function () {
-                var oldPassword = DocumentActions.GetElementById("txtOldPassword").value;
-                var newPassword = DocumentActions.GetElementById("txtNewPassword").value;
-                ChangePassword(oldPassword, newPassword);
-            };
-        }
-        catch (e) {
-        }
-        try {
-            DocumentActions.GetElementById("spnFav").onclick = function () {
-                var sys = new SystemTools();
-                sys.SwitchUserFavorite();
-            };
-        }
-        catch (e) {
-        }
-        AssignLoginInformation();
-    }
-    App.Startup = Startup;
-    function LanguageButton_Click() {
-        var SysSession = GetSystemEnvironment();
-        if (SysSession.ScreenLanguage == "ar") {
-            SysSession.ScreenLanguage = "en";
-            //SysSession.CurrentEnvironment.ScreenLanguage = "en";
-            //SysSession.CurrentEnvironment.CompanyNameAr = "";
-            //SysSession.CurrentEnvironment.CompanyName = "";
-        }
-        else { // Arabic Mode other mohaamed ragab
-            SysSession.ScreenLanguage = "ar";
-            //SysSession.CurrentEnvironment.ScreenLanguage = "ar";
-            //SysSession.CurrentEnvironment.CompanyNameAr = "";
-            //SysSession.CurrentEnvironment.CompanyName = "";
-        }
-        document.cookie = "Inv1_systemProperties=" + JSON.stringify(SysSession) + ";expires=Fri, 31 Dec 2030 23:59:59 GMT;path=/";
-        //Ajax.CallAsync({
-        //    url: Url.Action("SetScreenLang", "ClientTools"),
-        //    data: { lang: SysSession.CurrentEnvironment.ScreenLanguage },
-        //    success: (response) => { }
-        //});
-    }
     function AppendStyleSheet(fileName) {
         var lnk = document.createElement('link');
         lnk.href = "../css/" + fileName + ".css";
@@ -204,19 +96,6 @@ var App;
 function EnableBranchSelected() {
     var ddlBrachs = DocumentActions.GetElementById("ddlBrachs");
     ddlBrachs.removeAttribute("disabled");
-}
-function GetBranchs() {
-    var sys = new SystemTools();
-    var Env = GetSystemEnvironment();
-    var ddlBrachs = DocumentActions.GetElementById("ddlBrachs");
-    Ajax.Callsync({
-        url: sys.apiUrl("SystemTools", "GetBranchsByUserCode"),
-        data: { userCode: Env.UserCode, compCode: Env.CompCode },
-        success: function (response) {
-            var result = response;
-            DocumentActions.FillCombo(result, ddlBrachs, "BRA_CODE", "BRA_DESCL");
-        }
-    });
 }
 var GQ_GetUserBranch = /** @class */ (function () {
     function GQ_GetUserBranch() {
@@ -241,24 +120,6 @@ function GetParameterByName(name) {
     if (!results[2])
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-function ChangePassword(OldPassword, NewPassword) {
-    var sys = new SystemTools();
-    var Env = GetSystemEnvironment();
-    var UserCode = Env.UserCode;
-    $.ajax({
-        url: sys.apiUrl("SystemTools", "ChangePassword"),
-        data: { OldPassword: OldPassword, NewPassword: NewPassword, UserCode: UserCode },
-        success: function (response) {
-            var result = response;
-            if (result.IsSuccess == true) {
-                alert("Password changed");
-            }
-            else {
-                alert("Changing password failed");
-            }
-        }
-    });
 }
 function CloseSearchBox() {
     $("#SearchBox").modal("hide"); //.css("display", "none");
@@ -306,7 +167,6 @@ var Ajax = {
         }
     },
     CallAsync: function (settings) {
-        CheckTime();
         //run_waitMe();
         $.ajax({
             type: settings.type,
@@ -325,7 +185,6 @@ var Ajax = {
         });
     },
     Callsync: function (settings) {
-        CheckTime();
         //run_waitMe();
         $.ajax({
             type: settings.type,
@@ -657,31 +516,6 @@ var DocumentActions = {
         return element;
     }
 };
-function DateFormatddmmyyyy(dateForm) {
-    try {
-        var date = new Date();
-        var myDate = "";
-        if (dateForm.indexOf("Date(") > -1) {
-            myDate = dateForm.split('(')[1].split(')')[0];
-            date = new Date(Number(myDate));
-        }
-        else {
-            date = new Date(ConvertTDate(dateForm).toString());
-        }
-        var yy = date.getFullYear();
-        var mm = (date.getMonth() + 1);
-        var dd = date.getDate();
-        var year = yy;
-        var month = (mm < 10) ? ("0" + mm.toString()) : mm.toString();
-        var day = (dd < 10) ? ("0" + dd.toString()) : dd.toString();
-        var startDate = year + "-" + month + "-" + day;
-        var form_date = startDate;
-        return form_date;
-    }
-    catch (e) {
-        return DateFormat((new Date()).toString());
-    }
-}
 function DateFormat(dateForm) {
     try {
         var date = new Date();
@@ -777,52 +611,6 @@ function DateTimeFormat(dateForm) {
         return DateFormat((new Date()).toString());
     }
 }
-function DateStartMonth() {
-    var sys = new SystemTools();
-    var todaystr = ConvertToDateDash(GetDate()) <= ConvertToDateDash(sys.SysSession.CurrentEnvironment.EndDate) ? GetDate() : sys.SysSession.CurrentEnvironment.EndDate;
-    var dateString = todaystr;
-    var yyyy = dateString.substring(0, 4);
-    var mm = dateString.substring(5, 7);
-    var dd = dateString.substring(8, 10);
-    var ReturnedDate;
-    ReturnedDate = yyyy + '-' + mm + '-' + '01';
-    return ReturnedDate;
-}
-function ConvertToDateDash(date) {
-    try {
-        var x = date.split(" ");
-        var dt = x[0].split("-");
-        var year = dt[0];
-        var month = dt[1];
-        var day = dt[2];
-        var startDate = year + "-" + month + "-" + day + "T00:00:00";
-        var form_date = new Date(startDate);
-        return form_date;
-    }
-    catch (e) {
-        return (GetCurrentDate());
-    }
-}
-function ConvertToDate(date) {
-    try {
-        var x = date.split(" ");
-        var dt = x[0].split("/");
-        var tm = x[1].split(":");
-        var st = x[2];
-        var day = dt[0];
-        var month = dt[1];
-        var year = dt[2];
-        var hour = tm[0];
-        var Minute = tm[1];
-        var Second = tm[2];
-        var startDate = year + "-" + month + "-" + day + "T" + hour + ":" + Minute + ":" + Second;
-        var form_date = new Date(startDate);
-        return form_date;
-    }
-    catch (e) {
-        return (GetCurrentDate());
-    }
-}
 function DateTimeFormatWithoutT(dateForm) {
     try {
         var date = new Date();
@@ -852,21 +640,6 @@ function DateTimeFormatWithoutT(dateForm) {
     }
     catch (e) {
         return DateFormat(new Date().toString());
-    }
-}
-function ConvertTDate(date) {
-    try {
-        var x = date.split(" ");
-        var dt = x[0].split("/");
-        var day = dt[0];
-        var month = dt[1];
-        var year = dt[2];
-        var startDate = year + "-" + month + "-" + day;
-        var form_date = new Date(startDate);
-        return form_date;
-    }
-    catch (e) {
-        return (GetCurrentDate());
     }
 }
 function ClearGrid(_Grid, arr) {
@@ -940,25 +713,15 @@ var CodeDesciptionModel = /** @class */ (function () {
 function WorningMessage(msg_Ar, msg_En, tit_ar, tit_en, OnOk) {
     if (tit_ar === void 0) { tit_ar = "تنبيه"; }
     if (tit_en === void 0) { tit_en = "Worning"; }
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+    switch ("ar") {
         case "ar":
-            MessageBox.Show(msg_En, tit_en, OnOk);
-            focus();
-            break;
-        case "en":
             MessageBox.Show(msg_En, tit_en, OnOk);
             focus();
             break;
     }
 }
 function DisplayMassage(msg_Ar, msg_En, msg_type, OnOk) {
-    var Env = GetSystemEnvironment();
-    // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
-    if (Env.ScreenLanguage == "en")
-        $('#Text_Massage').html(msg_En);
-    else
-        $('#Text_Massage').html(msg_Ar);
+    $('#Text_Massage').html(msg_Ar);
     if (msg_type == '1') {
         $('#DivMassage').attr('class', 'col-lg-12  margingred  borderred');
         $('#DivMassage').attr('style', ' border-style: solid;border: solid;border-color: #5cb702; background-color : #009605 !important	');
@@ -987,12 +750,7 @@ function DisplayMassage(msg_Ar, msg_En, msg_type, OnOk) {
     }
 }
 function DisplayMassage_Processes(msg_Ar, msg_En, msg_type, OnOk) {
-    var Env = GetSystemEnvironment();
-    // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
-    if (Env.ScreenLanguage == "en")
-        $('#Text_Massage').html(msg_En);
-    else
-        $('#Text_Massage').html(msg_Ar);
+    $('#Text_Massage').html(msg_Ar);
     if (msg_type == '1') {
         $('#DivMassage').attr('class', 'col-lg-12  margingred  borderred');
         $('#DivMassage').attr('style', ' border-style: solid;border: solid;border-color: #5cb702; background-color : #000000 !important	');
@@ -1039,13 +797,9 @@ function ConfirmMessage(msg_Ar, msg_En, tit_ar, tit_en, OnOk) {
     if (msg_En === void 0) { msg_En = "Data Saved Successfully"; }
     if (tit_ar === void 0) { tit_ar = "تأكيد"; }
     if (tit_en === void 0) { tit_en = "Confirm"; }
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+    switch ("ar") {
         case "ar":
             MessageBox.Show(msg_Ar, tit_ar, OnOk);
-            break;
-        case "en":
-            MessageBox.Show(msg_En, tit_en, OnOk);
             break;
     }
 }
@@ -1054,26 +808,18 @@ function ConfirmMessagee(msg_Ar, msg_En, tit_ar, tit_en, OnOk) {
     if (msg_En === void 0) { msg_En = "Data Saved Successfully"; }
     if (tit_ar === void 0) { tit_ar = "تأكيد"; }
     if (tit_en === void 0) { tit_en = "Confirm"; }
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+    switch ("ar") {
         case "ar":
             MessageBox.Show(msg_Ar, tit_ar, OnOk);
-            return 1;
-        case "en":
-            MessageBox.Show(msg_En, tit_en, OnOk);
             return 1;
     }
 }
 function WorningMessageDailog(msg_Ar, msg_En, tit_ar, tit_en, OnOk, OnCancel) {
     if (tit_ar === void 0) { tit_ar = "تنبيه"; }
     if (tit_en === void 0) { tit_en = "Worning"; }
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+    switch ("ar") {
         case "ar":
             MessageBox.Ask(msg_Ar, tit_ar, OnOk, OnCancel);
-            break;
-        case "en":
-            MessageBox.Ask(msg_En, tit_en, OnOk, OnCancel);
             break;
     }
 }
@@ -1137,20 +883,6 @@ function GetResourceList(Sourcekey) {
     });
     return result;
 }
-function GetCurrentDate() {
-    //  
-    var ses = GetSystemEnvironment();
-    var kControl = ses.I_Control;
-    if (kControl != undefined) {
-        var now = new Date;
-        var utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-        utc.setHours(utc.getHours() + kControl.UserTimeZoneUTCDiff);
-        return utc;
-    }
-    else {
-        return (new Date());
-    }
-}
 // Doha
 function GetDate() {
     var today = new Date();
@@ -1166,53 +898,6 @@ function GetDate() {
     }
     ReturnedDate = yyyy + '-' + mm + '-' + dd;
     return ReturnedDate;
-}
-function CreateDropdownList(arr, Name_Ar, Name_En, Key, IsSelectNull) {
-    if (IsSelectNull === void 0) { IsSelectNull = false; }
-    var Env = GetSystemEnvironment();
-    var element = document.createElement("select");
-    element.className = "form-control input-sm";
-    if (IsSelectNull == true)
-        element.options.add(new Option(" ", "null"));
-    switch (Env.Language) {
-        case "ar":
-            for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
-                var item = arr_1[_i];
-                element.options.add(new Option(item[Name_Ar], item[Key]));
-            }
-            break;
-        case "en":
-            for (var _a = 0, arr_2 = arr; _a < arr_2.length; _a++) {
-                var item = arr_2[_a];
-                element.options.add(new Option(item[Name_En], item[Key]));
-            }
-            break;
-    }
-    return element;
-}
-//eslam elassal 20 oct 2020 => CreateDropdownListWithDefaultValue(K_D_ExpensesDataSource, "DescA", "DescE", "ExpenseID", "اختر",true);s
-function CreateDropdownListWithDefaultValue(arr, Name_Ar, Name_En, Key, DefaultVal, IsSelectNull) {
-    if (IsSelectNull === void 0) { IsSelectNull = false; }
-    var Env = GetSystemEnvironment();
-    var element = document.createElement("select");
-    element.className = "form-control input-sm";
-    if (IsSelectNull == true)
-        element.options.add(new Option(DefaultVal, "null"));
-    switch (Env.Language) {
-        case "ar":
-            for (var _i = 0, arr_3 = arr; _i < arr_3.length; _i++) {
-                var item = arr_3[_i];
-                element.options.add(new Option(item[Name_Ar], item[Key]));
-            }
-            break;
-        case "en":
-            for (var _a = 0, arr_4 = arr; _a < arr_4.length; _a++) {
-                var item = arr_4[_a];
-                element.options.add(new Option(item[Name_En], item[Key]));
-            }
-            break;
-    }
-    return element;
 }
 //function CreateListMaleFemale(): HTMLSelectElement {
 //    var offDay = [
@@ -1283,69 +968,6 @@ function ThousandsSeparator(num) {
     }
     return parts.join(",");
 }
-function convertToH(date) {
-    var sys = new SystemTools();
-    var HDate = "";
-    if (date != "")
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SystemTools", "GetHDate"),
-            data: { GDate: date },
-            success: function (d) {
-                var result = d;
-                HDate = result;
-            }
-        });
-    return HDate;
-}
-function convertToG(date) {
-    var sys = new SystemTools();
-    var result = null;
-    if (date != "")
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("Tools", "GetGDate"),
-            data: { HDate: date },
-            success: function (d) {
-                result = d;
-                //GDate = result;
-                // alert(result);
-            }
-        });
-    return result;
-}
-function CheckTime() {
-    try {
-        var SysSession = GetSystemEnvironment();
-        var timelogin;
-        var dt = new Date();
-        var timenow = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-        var LastAccess = localStorage.getItem("LastAccess");
-        var SysTimeOut = localStorage.getItem("startTimeOut");
-        timelogin = LastAccess;
-        var timeout = CompareTime(timenow, timelogin);
-        localStorage.setItem("LastAccess", timenow);
-        var newSysTimeOut;
-        try {
-            if (SysSession.I_Control[0].SysTimeOut == null) {
-                newSysTimeOut = 10;
-            }
-            else {
-                newSysTimeOut = SysSession.I_Control[0].SysTimeOut;
-            }
-        }
-        catch (e) {
-            newSysTimeOut = 10;
-        }
-        if (timeout > newSysTimeOut || timeout < 0) {
-            HomeComponent.MassageCheckTime("لقد استنفذت وقت الجلسة، يجب معاودة الدخول مرة اخري", "System Time out , Please relogin");
-        }
-    }
-    catch (e) {
-    }
-}
-//function MassageCheckTime(msg_Ar: string, msg_En: string, OnOk?: () => void) {
-//    var Env = GetSystemEnvironment();
 //    // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
 //    if (Env.ScreenLanguage == "en")
 //        $('#Text_Massage').html(msg_En);
@@ -1377,28 +999,6 @@ function SetCustomerType(Transcode, Iscredit, SlsType) {
         Ct.SalesInvoiceNature = 2;
     }
     return Ct;
-}
-function ScreenHelp(ModuleCode) {
-    var sys = new SystemTools();
-    $.ajax({
-        type: "GET",
-        url: sys.apiUrl("SystemTools", "GetHelp"),
-        data: { ModuleCode: ModuleCode },
-        async: false,
-        success: function (d) {
-            //debugger;
-            var result = d;
-            var res = result.Response;
-            if (res != null) {
-                if (sys.SysSession.CurrentEnvironment.ScreenLanguage == "ar") {
-                    $("#modalHelpRep").html("<div style=\"direction:rtl;height: 289px;overflow: scroll;overflow-x: hidden;font-weight: bold;\" >" + res.HelpBody_Ar + "</div>");
-                }
-                else {
-                    $("#modalHelpRep").html("<div style=\"direction:ltr;height: 289px;overflow: scroll;overflow-x: hidden;font-weight: bold;\">" + res.HelpBody_En + "</div>");
-                }
-            }
-        }
-    });
 }
 function CompareTime(t1, t2) {
     // add days 

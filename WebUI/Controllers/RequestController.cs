@@ -5,8 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web;
 using System.Web.Mvc;
-using Inv.WebUI.Models;
-using Inv.WebUI.Tools;
+using Inv.WebUI.Models;  
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,17 +40,7 @@ namespace Inv.WebUI.Controllers
         }
 
 
-        public JsonResult OnLogged()
-        {
-
-            var obj = new
-            {
-                url = Url.Action("HomeIndex", "Home")
-
-            };
-            var result = Shared.JsonObject(obj);
-            return result;
-        }
+      
 
     }
 }

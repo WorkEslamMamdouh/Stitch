@@ -37,7 +37,7 @@
             success: (d) => {
                 let result = d.result as ResponseResult;
                 if (result.ResponseState == true) {
-                    SharedWork.SwitchModes(ScreenModes.Query);
+                     
                 }
                 else {
                     setTimeout(function () { MessageBox.Show(result.ResponseMessage, actionName); }, 300);

@@ -35,26 +35,6 @@ function IsNullOrEmpty(value: string): boolean {
         return false;
 }
 
-function GetIndexByUseId(idValue: Number, BaseTableName: string, idFieldName: string, Condition: string): string {
-
-    let result = "";
-    if (IsNullOrEmpty(idValue.toString()) || IsNullOrEmpty(BaseTableName) || IsNullOrEmpty(idFieldName)) {
-        return result;
-    } else {
-        let sys = new SystemTools;
-        let result = "";
-        Ajax.Callsync({
-            url: sys.apiUrl("SystemTools", "GetIndexByUseId"),
-            data: { idValue: idValue.toString(), BaseTableName: BaseTableName, idFieldName: idFieldName, Condition: Condition },
-            success: (d) => {
-                result = d;
-            }
-        });
-
-        return result;
-    }
-}
-
 function GetIndexByUseCode(idValue: string, BaseTableName: string, idFieldName: string, condition: string): string {
     let result = "";
     if (IsNullOrEmpty(idValue.toString()) || IsNullOrEmpty(BaseTableName) || IsNullOrEmpty(idFieldName)) {
@@ -168,121 +148,7 @@ interface IJsGridColumn {
 
 namespace App {
 
-    let branchCodeSelected: string = "";
-    var LanguageButton: HTMLAnchorElement;
-
-    function AssignLoginInformation() {
-        var Env = GetSystemEnvironment();
-        if (DocumentActions.GetElementById<HTMLSpanElement>("infoSysName") != null)
-            DocumentActions.GetElementById<HTMLSpanElement>("infoSysName").innerText = Env.SystemCode;
-
-        if (DocumentActions.GetElementById<HTMLSpanElement>("infoSubSysName") != null)
-            DocumentActions.GetElementById<HTMLSpanElement>("infoSubSysName").innerText = Env.SubSystemCode;
-
-        if (DocumentActions.GetElementById<HTMLSpanElement>("infoCompanyName") != null) {
-            if (Env.ScreenLanguage == "ar")
-                DocumentActions.GetElementById<HTMLSpanElement>("infoCompanyName").innerText = Env.CompanyNameAr;
-            else
-                DocumentActions.GetElementById<HTMLSpanElement>("infoCompanyName").innerText = Env.CompanyName;
-        }
-
-        if (DocumentActions.GetElementById<HTMLSpanElement>("infoCurrentYear") != null)
-            DocumentActions.GetElementById<HTMLSpanElement>("infoCurrentYear").innerText = Env.CurrentYear;
-
-        if (DocumentActions.GetElementById<HTMLSpanElement>("infoUserCode") != null)
-            DocumentActions.GetElementById<HTMLSpanElement>("infoUserCode").innerText = Env.UserCode;
-    }
-
-    export function Startup() {
-
-        var Env = GetSystemEnvironment();
-
-        try {
-            let SpanUserName: HTMLSpanElement = DocumentActions.GetElementById<HTMLSpanElement>("SpanUserName");
-            SpanUserName.innerText = Env.UserCode;
-            SpanUserName.style.display = "block";
-            SpanUserName.onclick = GetBranchs;
-
-        } catch (e) {
-
-        }
-
-        var btnEditUserBranchs: HTMLButtonElement;
-        try {
-            btnEditUserBranchs = DocumentActions.GetElementById<HTMLButtonElement>("btnEditUserBranchs");
-            btnEditUserBranchs.onclick = EnableBranchSelected;
-        } catch (e) {
-
-        }
-
-        //var btnChangeBranch: HTMLButtonElement;
-        //try {
-        //    btnChangeBranch = DocumentActions.GetElementById<HTMLButtonElement>("btnChangeBranch");
-        //    btnChangeBranch.onclick = ChangeBranch;
-        //} catch (e) {
-
-        //}
-
-        AssignLoginInformation();
-        try {
-            LanguageButton = DocumentActions.GetElementById<HTMLAnchorElement>("LanguageButton");
-            LanguageButton.onclick = LanguageButton_Click;
-        } catch (e) {
-
-        }
-
-        try {
-            DocumentActions.GetElementById<HTMLInputElement>("btnChangePassword").onclick = () => {
-
-                let oldPassword: string = DocumentActions.GetElementById<HTMLInputElement>("txtOldPassword").value;
-                let newPassword: string = DocumentActions.GetElementById<HTMLInputElement>("txtNewPassword").value;
-                ChangePassword(oldPassword, newPassword);
-            };
-        } catch (e) {
-
-        }
-        try {
-            DocumentActions.GetElementById<HTMLSpanElement>("spnFav").onclick = () => {
-                let sys: SystemTools = new SystemTools();
-                sys.SwitchUserFavorite();
-            };
-        } catch (e) {
-
-        }
-
-        AssignLoginInformation();
-    }
-
-    function LanguageButton_Click() {
-        var SysSession = GetSystemEnvironment();
-
-        if (SysSession.ScreenLanguage == "ar") {
-            SysSession.ScreenLanguage = "en";
-            //SysSession.CurrentEnvironment.ScreenLanguage = "en";
-            //SysSession.CurrentEnvironment.CompanyNameAr = "";
-            //SysSession.CurrentEnvironment.CompanyName = "";
-
-        }
-        else { // Arabic Mode other mohaamed ragab
-
-            SysSession.ScreenLanguage = "ar";
-            //SysSession.CurrentEnvironment.ScreenLanguage = "ar";
-            //SysSession.CurrentEnvironment.CompanyNameAr = "";
-            //SysSession.CurrentEnvironment.CompanyName = "";
-
-        }
-        document.cookie = "Inv1_systemProperties=" + JSON.stringify(SysSession) + ";expires=Fri, 31 Dec 2030 23:59:59 GMT;path=/";
-
-        //Ajax.CallAsync({
-        //    url: Url.Action("SetScreenLang", "ClientTools"),
-        //    data: { lang: SysSession.CurrentEnvironment.ScreenLanguage },
-        //    success: (response) => { }
-        //});
-
-
-    }
-
-
+   
 
     function AppendStyleSheet(fileName: string) {
         var lnk = document.createElement('link');
@@ -307,19 +173,7 @@ function EnableBranchSelected() {
     ddlBrachs.removeAttribute("disabled");
 }
 
-function GetBranchs() {
-    var sys = new SystemTools();
-    var Env = GetSystemEnvironment();
-    let ddlBrachs: HTMLSelectElement = DocumentActions.GetElementById<HTMLSelectElement>("ddlBrachs");
-    Ajax.Callsync({
-        url: sys.apiUrl("SystemTools", "GetBranchsByUserCode"),
-        data: { userCode: Env.UserCode, compCode: Env.CompCode },
-        success: (response) => {
-            let result = response as Array<GQ_GetUserBranch>;
-            DocumentActions.FillCombo(result, ddlBrachs, "BRA_CODE", "BRA_DESCL");
-        }
-    });
-}
+
 
 class GQ_GetUserBranch {
     public USER_CODE: string;
@@ -350,25 +204,6 @@ function GetParameterByName(name) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-function ChangePassword(OldPassword: string, NewPassword: string) {
-    var sys = new SystemTools();
-    var Env = GetSystemEnvironment();
-    let UserCode = Env.UserCode;
-    $.ajax({
-        url: sys.apiUrl("SystemTools", "ChangePassword"),
-        data: { OldPassword: OldPassword, NewPassword: NewPassword, UserCode: UserCode },
-        success: (response) => {
-            let result = response as BaseResponse;
-            if (result.IsSuccess == true) {
-                alert("Password changed");
-            }
-            else {
-                alert("Changing password failed");
-            }
-        }
-    });
 }
 
 function CloseSearchBox() {
@@ -421,7 +256,7 @@ var Ajax = {
         }
     },
     CallAsync: <T>(settings: JQueryAjaxSettings) => {
-        CheckTime();
+  
         //run_waitMe();
         $.ajax({
             type: settings.type,
@@ -443,7 +278,7 @@ var Ajax = {
         })
     },
     Callsync: <T>(settings: JQueryAjaxSettings) => {
-        CheckTime();
+    
         //run_waitMe();
         $.ajax({
 
@@ -827,35 +662,7 @@ var DocumentActions = {
         return element;
     }
 };
-
-function DateFormatddmmyyyy(dateForm: string): string {
-    try {
-        var date: Date = new Date();
-        let myDate: string = "";
-        if (dateForm.indexOf("Date(") > -1) {
-            myDate = dateForm.split('(')[1].split(')')[0];
-            date = new Date(Number(myDate));
-        }
-        else {
-            date = new Date(ConvertTDate(dateForm).toString());
-        }
-
-        let yy = date.getFullYear();
-        let mm = (date.getMonth() + 1);
-        let dd = date.getDate();
-
-        let year = yy;
-        let month = (mm < 10) ? ("0" + mm.toString()) : mm.toString();
-        let day = (dd < 10) ? ("0" + dd.toString()) : dd.toString();
-
-        var startDate = year + "-" + month + "-" + day;
-        let form_date = startDate;
-        return form_date;
-    } catch (e) {
-        return DateFormat((new Date()).toString());
-    }
-}
-
+ 
 function DateFormat(dateForm: string): string {
 
     try {
@@ -978,66 +785,8 @@ function DateTimeFormat(dateForm: string): string {
     }
 }
 
-function DateStartMonth() {
-
-
-    var sys: SystemTools = new SystemTools();
-    var todaystr: string = ConvertToDateDash(GetDate()) <= ConvertToDateDash(sys.SysSession.CurrentEnvironment.EndDate) ? GetDate() : sys.SysSession.CurrentEnvironment.EndDate;
-
-    var dateString = todaystr;
-    var yyyy = dateString.substring(0, 4);
-    var mm = dateString.substring(5, 7);
-    var dd = dateString.substring(8, 10);
-
-    var ReturnedDate: string;
-    ReturnedDate = yyyy + '-' + mm + '-' + '01';
-    return ReturnedDate;
-}
-function ConvertToDateDash(date: string): Date {
-    try {
-
-        let x = date.split(" ");
-        let dt = x[0].split("-");
-
-
-
-        let year = dt[0];
-        let month = dt[1];
-        let day = dt[2];
-
-
-        var startDate = year + "-" + month + "-" + day + "T00:00:00";
-        let form_date = new Date(startDate);
-        return form_date;
-    } catch (e) {
-        return (GetCurrentDate());
-    }
-}
-function ConvertToDate(date: string): Date {
-    try {
-
-        let x = date.split(" ");
-        let dt = x[0].split("/");
-        let tm = x[1].split(":");
-        let st = x[2];
-
-
-        let day = dt[0];
-        let month = dt[1];
-        let year = dt[2];
-
-        var hour = tm[0];
-        let Minute = tm[1];
-        let Second = tm[2];
-
-
-        var startDate = year + "-" + month + "-" + day + "T" + hour + ":" + Minute + ":" + Second;
-        let form_date = new Date(startDate);
-        return form_date;
-    } catch (e) {
-        return (GetCurrentDate());
-    }
-}
+ 
+  
 function DateTimeFormatWithoutT(dateForm: string): string {
     try {
 
@@ -1076,27 +825,7 @@ function DateTimeFormatWithoutT(dateForm: string): string {
     }
 }
 
-
-function ConvertTDate(date: string): Date {
-
-    try {
-
-        let x = date.split(" ");
-        let dt = x[0].split("/");
-
-
-        let day = dt[0];
-        let month = dt[1];
-        let year = dt[2];
-
-
-        var startDate = year + "-" + month + "-" + day;
-        let form_date = new Date(startDate);
-        return form_date;
-    } catch (e) {
-        return (GetCurrentDate());
-    }
-}
+ 
 
 function ClearGrid<T>(_Grid: JsGrid = new JsGrid(), arr: Array<T>) {
     arr = new Array();
@@ -1182,26 +911,19 @@ class CodeDesciptionModel {
 }
 
 function WorningMessage(msg_Ar: string, msg_En: string, tit_ar: string = "تنبيه", tit_en: string = "Worning", OnOk?: () => void) {
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+ 
+    switch ("ar") {
 
         case "ar":
             MessageBox.Show(msg_En, tit_en, OnOk);
             focus();
             break;
-        case "en":
-            MessageBox.Show(msg_En, tit_en, OnOk);
-            focus();
-            break;
+       
     }
 }
 
 function DisplayMassage(msg_Ar: string, msg_En: string, msg_type: string, OnOk?: () => void) {
-    var Env = GetSystemEnvironment();
-    // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
-    if (Env.ScreenLanguage == "en")
-        $('#Text_Massage').html(msg_En);
-    else
+ 
         $('#Text_Massage').html(msg_Ar);
 
     if (msg_type == '1') {
@@ -1249,11 +971,7 @@ function DisplayMassage(msg_Ar: string, msg_En: string, msg_type: string, OnOk?:
 
 
 function DisplayMassage_Processes(msg_Ar: string, msg_En: string, msg_type: string, OnOk?: () => void) {
-    var Env = GetSystemEnvironment();
-    // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
-    if (Env.ScreenLanguage == "en")
-        $('#Text_Massage').html(msg_En);
-    else
+ 
         $('#Text_Massage').html(msg_Ar);
 
     if (msg_type == '1') {
@@ -1311,37 +1029,31 @@ function findIndexInData(data, property, value) {
 
 
 function ConfirmMessage(msg_Ar: string = "تمت عملية الحفظ  بنجاح", msg_En: string = "Data Saved Successfully", tit_ar: string = "تأكيد", tit_en: string = "Confirm", OnOk?: () => void) {
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+ 
+    switch ("ar") {
         case "ar":
             MessageBox.Show(msg_Ar, tit_ar, OnOk);
             break;
-        case "en":
-            MessageBox.Show(msg_En, tit_en, OnOk);
-            break;
+       
     }
 }
 function ConfirmMessagee(msg_Ar: string = "تمت عملية الحفظ  بنجاح", msg_En: string = "Data Saved Successfully", tit_ar: string = "تأكيد", tit_en: string = "Confirm", OnOk?: () => number) {
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+    
+    switch ("ar") {
         case "ar":
             MessageBox.Show(msg_Ar, tit_ar, OnOk);
             return 1;
-        case "en":
-            MessageBox.Show(msg_En, tit_en, OnOk);
-            return 1;
+      
     }
 
 }
 function WorningMessageDailog(msg_Ar: string, msg_En: string, tit_ar: string = "تنبيه", tit_en: string = "Worning", OnOk?: () => void, OnCancel?: () => void) {
-    var Env = GetSystemEnvironment();
-    switch (Env.ScreenLanguage) {
+ 
+    switch ("ar") {
         case "ar":
             MessageBox.Ask(msg_Ar, tit_ar, OnOk, OnCancel);
             break;
-        case "en":
-            MessageBox.Ask(msg_En, tit_en, OnOk, OnCancel);
-            break;
+     
     }
 }
 //function MessageDailog(msg_Ar: string, msg_En: string, tit_ar: string = "تنبيه", tit_en: string = "Worning") {
@@ -1411,21 +1123,7 @@ function GetResourceList(Sourcekey: string): any {
     });
     return result;
 }
-
-function GetCurrentDate(): Date {
-    //  
-    let ses = GetSystemEnvironment();
-    let kControl = ses.I_Control;
-    if (kControl != undefined) {
-        var now = new Date;
-        var utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-        utc.setHours(utc.getHours() + kControl.UserTimeZoneUTCDiff);
-        return utc;
-    }
-    else {
-        return (new Date());
-    }
-}
+ 
 // Doha
 function GetDate() {
     var today: Date = new Date();
@@ -1442,50 +1140,7 @@ function GetDate() {
     ReturnedDate = yyyy + '-' + mm + '-' + dd;
     return ReturnedDate;
 }
-
-function CreateDropdownList<T>(arr: Array<T>, Name_Ar: string, Name_En: string, Key: string, IsSelectNull: Boolean = false): HTMLSelectElement {
-    var Env = GetSystemEnvironment();
-    let element = document.createElement("select") as HTMLSelectElement;
-    element.className = "form-control input-sm";
-    if (IsSelectNull == true)
-        element.options.add(new Option(" ", "null"));
-    switch (Env.Language) {
-        case "ar":
-            for (var item of arr) {
-                element.options.add(new Option(item[Name_Ar], item[Key]));
-            }
-            break;
-        case "en":
-            for (var item of arr) {
-                element.options.add(new Option(item[Name_En], item[Key]));
-            }
-            break;
-    }
-    return element;
-}
-//eslam elassal 20 oct 2020 => CreateDropdownListWithDefaultValue(K_D_ExpensesDataSource, "DescA", "DescE", "ExpenseID", "اختر",true);s
-function CreateDropdownListWithDefaultValue<T>(arr: Array<T>, Name_Ar: string, Name_En: string, Key: string, DefaultVal: string, IsSelectNull: Boolean = false): HTMLSelectElement {
-    var Env = GetSystemEnvironment();
-    let element = document.createElement("select") as HTMLSelectElement;
-    element.className = "form-control input-sm";
-    if (IsSelectNull == true)
-        element.options.add(new Option(DefaultVal, "null"));
-    switch (Env.Language) {
-        case "ar":
-            for (var item of arr) {
-                element.options.add(new Option(item[Name_Ar], item[Key]));
-            }
-            break;
-        case "en":
-            for (var item of arr) {
-                element.options.add(new Option(item[Name_En], item[Key]));
-            }
-            break;
-    }
-    return element;
-}
-
-
+ 
 //function CreateListMaleFemale(): HTMLSelectElement {
 //    var offDay = [
 //        {
@@ -1572,83 +1227,7 @@ function ThousandsSeparator(num: number): string {
 
     return parts.join(",");
 }
-function convertToH(date: string) {
-    var sys: SystemTools = new SystemTools();
-    var HDate = "";
-    if (date != "")
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("SystemTools", "GetHDate"),
-            data: { GDate: date },
-            success: (d) => {
-
-                let result = d as string;
-                HDate = result;
-            }
-        });
-    return HDate;
-}
-function convertToG(date: string) {
-    var sys: SystemTools = new SystemTools();
-    var result = null;
-    if (date != "")
-        Ajax.Callsync({
-            type: "Get",
-            url: sys.apiUrl("Tools", "GetGDate"),
-            data: { HDate: date },
-            success: (d) => {
-
-                result = d as Date;
-                //GDate = result;
-                // alert(result);
-            }
-        });
-    return result;
-}
-function CheckTime() {
-
-    try {
-
-
-        var SysSession = GetSystemEnvironment();
-
-        var timelogin;
-        var dt = new Date();
-        var timenow = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-        var LastAccess = localStorage.getItem("LastAccess");
-        var SysTimeOut = localStorage.getItem("startTimeOut");
-        timelogin = LastAccess
-        var timeout = CompareTime(timenow, timelogin);
-        localStorage.setItem("LastAccess", timenow)
-        var newSysTimeOut;
-
-        try {
-            if (SysSession.I_Control[0].SysTimeOut == null) {
-                newSysTimeOut = 10;
-            }
-            else {
-                newSysTimeOut = SysSession.I_Control[0].SysTimeOut;
-            }
-
-        } catch (e) {
-            newSysTimeOut = 10;
-        }
-
-        if (timeout > newSysTimeOut || timeout < 0) {
-            
-            HomeComponent.MassageCheckTime("لقد استنفذت وقت الجلسة، يجب معاودة الدخول مرة اخري", "System Time out , Please relogin");
-            
-            
-        }
-
-    } catch (e) {
-
-    }
-
-}
-
-//function MassageCheckTime(msg_Ar: string, msg_En: string, OnOk?: () => void) {
-//    var Env = GetSystemEnvironment();
+  
 //    // msgtype : 1 : Sucess , 2: Fetal Error , 3: Data Entry Error 
 //    if (Env.ScreenLanguage == "en")
 //        $('#Text_Massage').html(msg_En);
@@ -1694,36 +1273,6 @@ function SetCustomerType(Transcode: number, Iscredit: number, SlsType: string) {
 
 }
 
-
-function ScreenHelp(ModuleCode: string) {
-
-    var sys: SystemTools = new SystemTools();
-
-
-    $.ajax({
-        type: "GET",
-        url: sys.apiUrl("SystemTools", "GetHelp"),
-        data: { ModuleCode: ModuleCode },
-        async: false,
-        success: (d) => {
-            //debugger;
-            let result = d as BaseResponse;
-            let res = result.Response as G_ModuleHelp;
-            if (res != null) {
-                if (sys.SysSession.CurrentEnvironment.ScreenLanguage == "ar") {
-                    $("#modalHelpRep").html(`<div style="direction:rtl;height: 289px;overflow: scroll;overflow-x: hidden;font-weight: bold;" >` + res.HelpBody_Ar + `</div>`);
-                }
-                else {
-                    $("#modalHelpRep").html(`<div style="direction:ltr;height: 289px;overflow: scroll;overflow-x: hidden;font-weight: bold;">` + res.HelpBody_En + `</div>`);
-                }
-            }
-        }
-
-
-    });
-
-
-}
 
 
 function CompareTime(t1: string, t2: string): number {

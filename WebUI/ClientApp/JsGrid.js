@@ -14,7 +14,6 @@ var normalizePromise = function (promise) {
 };
 var JsGrid = /** @class */ (function () {
     function JsGrid() {
-        this.SysSession = GetSystemSession('Home');
         this.autosearch = true;
         this.ConfirmDeleteing = false;
         this.PageSize = 50;
@@ -81,7 +80,6 @@ var JsGrid = /** @class */ (function () {
             pageSize: this.PageSize,
             data: this.DataSource,
             confirmDeleting: true,
-            deleteConfirm: this.SysSession.CurrentEnvironment.ScreenLanguage == "ar" ? "هل متأكد من الحذف" : "Are you sure ?",
             fields: this.Columns,
             //controller: {
             //    data : this.DataSource,

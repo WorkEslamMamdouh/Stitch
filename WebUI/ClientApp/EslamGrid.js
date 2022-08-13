@@ -496,17 +496,23 @@ function BuildGridControl(flagDisplay, Grid) {
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').click(function () {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-            Grid.Column[u].ColumnType.onclick();
+            if (Grid.Column[u].ColumnType.onclick != null) {
+                Grid.Column[u].ColumnType.onclick();
+            }
         });
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').on('keyup', function (e) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-            Grid.Column[u].ColumnType.onkeyup();
+            if (Grid.Column[u].ColumnType.onkeyup != null) {
+                Grid.Column[u].ColumnType.onkeyup();
+            }
         });
         $('#' + NameTable + '_' + Grid.Column[u].Name + cnt + '').on('change', function (e) {
             if ($("#StatusFlag_" + NameTable + '_' + cnt).val() != "i")
                 $("#StatusFlag_" + NameTable + '_' + cnt).val("u");
-            Grid.Column[u].ColumnType.onchange();
+            if (Grid.Column[u].ColumnType.onchange != null) {
+                Grid.Column[u].ColumnType.onchange();
+            }
             ComputeTotalGridControl(Grid, Grid.ESG.object);
         });
         //--------------------------------------------اضافة style -----------------------------------
